@@ -1,0 +1,30 @@
+Package: FastPG
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "First",
+           family = "Last",
+           role = c("aut", "cre"),
+           email = "first.last@example.com")
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat,
+    mockery,
+    openssl,
+    curl
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
+LinkingTo: 
+    Rcpp,
+    RcppParallel
+Imports:
+    Rcpp,
+    RcppParallel,
+    flowCore,
+    checkmate,
+    methods,
+    nmslibR,
+    igraph

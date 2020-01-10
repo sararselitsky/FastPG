@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+
 // [[Rcpp::depends(RcppParallel)]]
 #include <RcppParallel.h>
 #include <vector>
@@ -10,6 +11,7 @@ using namespace Rcpp;
 
 using namespace RcppParallel;
 
+// [[Rcpp::plugins(cpp11)]]
 auto removeNANs = [](double number) -> bool
 {
   return std::isnan(number);
@@ -69,6 +71,11 @@ struct Jce : public Worker {
     }
   }
 };
+
+//' Run parallel jacard
+//' 
+//' @param mat A numeric matrix
+//' @export
 // [[Rcpp::export]]
 NumericMatrix rcpp_parallel_jce(NumericMatrix mat) {
 
