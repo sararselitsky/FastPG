@@ -1,7 +1,18 @@
 # Mac OS X
 .DS_STORE
 
-.Rproj.user
+# R 
 .Rhistory
 .RData
+
+# R Studio
+.Rproj.user
 .Ruserdata
+
+# R Package builds
+README.html
+
+# Custom excludes
+
+# Internal use cases and data to guide development.
+Trials

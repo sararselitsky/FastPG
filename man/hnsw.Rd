@@ -4,14 +4,17 @@
 \alias{hnsw}
 \title{Hierarchical navigable small world relations map}
 \usage{
-hnsw(dat, k = 30, nThread = 5)
+hnsw(dat, k = 30, nThread = 1)
 }
 \arguments{
-\item{dat}{}
+\item{dat}{The data matrix to analyze}
 
-\item{k}{}
+\item{k}{The estimated number of clusters, defaults to 30}
 
-\item{nThread}{}
+\item{nThread}{The number of threads to use, defaults to 1}
+}
+\value{
+The relations matrix
 }
 \description{
 Hierarchical navigable small world relations map

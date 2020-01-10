@@ -7,7 +7,10 @@
 loadFCS(fcsFile)
 }
 \arguments{
-\item{fcsFile}{}
+\item{fcsFile}{The FCS format file to read in}
+}
+\value{
+The data matrix from an FCS file
 }
 \description{
 Read in an FCS file

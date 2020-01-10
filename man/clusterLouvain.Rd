@@ -7,7 +7,10 @@
 clusterLouvain(relations)
 }
 \arguments{
-\item{relations}{}
+\item{relations}{A relations matrix}
+}
+\value{
+The community membership data frame
 }
 \description{
 Louvain clustering

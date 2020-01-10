@@ -25,18 +25,16 @@
 #' @return A matrix of measurements for event rows (cells) x feature columns
 #'   (signal channels).
 #' @export
-#'
-#' @examples
 fcsMatrix <- function( data, signalColumns= NULL, drop= TRUE, sample= FALSE, force= FALSE ) {
     
-    if ( ! is(data, "flowFrame" )) {
-        data <- read.FCS( data )
+    if ( ! inherits(data, "flowFrame" )) {
+        data <- flowCore::read.FCS( data )
     }
     
     if (! file.exists(file) ) {
         stop( paste0( "Can't find FCS file: \"", file, "\"" ), call.= FALSE )
     }
-    if (! isFCSfile(file)) {
+    if (! flowCore::isFCSfile(file)) {
         message <- paste0( "Appears not to be an FCS file: \"", file, "\"\n" )
         if (force) {
             message <- paste0( message, "\tAttempting to process anyway.")
@@ -46,7 +44,7 @@ fcsMatrix <- function( data, signalColumns= NULL, drop= TRUE, sample= FALSE, for
         }
     }
     
-    fcsObj <- read.FCS( file )
+    fcsObj <- flowCore::read.FCS( file )
 }
 
 ### Quick and dirty get it running code, fix later
@@ -56,7 +54,7 @@ helpText <- "
 USAGE:
 ./fastPG.Rscript [-g] <FCS_FILE>
 
--g          Switch to use parallel-louvain clustering with grappolo
+-g          Switch to use parallel-louvain clustering with grappolo 
 
 <FCS-FILE>  Filename (path) to FCS format data file. May only contain
 data columns.
@@ -69,12 +67,13 @@ same directory.
 
 #' Parse command line
 #'
-#' @param args 
+#' @param args A character vector of command line argument strings, usually
+#'   `commandArgs( trailingOnly= TRUE )`
 #'
-#' @return
+#' @return A list of options and their values, either set from the passed
+#'   in args= vector or by default.
+#'   
 #' @export
-#'
-#' @examples
 parseCli <- function( args= commandArgs( trailingOnly= TRUE ) ) {
     opts <- list(
         fcsFile= "",
@@ -126,34 +125,26 @@ parseCli <- function( args= commandArgs( trailingOnly= TRUE ) ) {
 
 #' Read in an FCS file
 #'
-#' @param fcsFile 
+#' @param fcsFile The FCS format file to read in
 #'
-#' @return
+#' @return The data matrix from an FCS file
 #' @export
-#'
-#' @examples
 loadFCS <- function( fcsFile ) {
     # TODO column select - to be added as feature
     
-    fcsDF <- as.data.frame( flowCore::exprs( flowCore::read.FCS( fcsFile )))
-    
-
-    as.matrix(fcsDF)
-    
+   flowCore::exprs( flowCore::read.FCS( fcsFile ))
 }
 
 # 
 #' Hierarchical navigable small world relations map
 #'
-#' @param dat 
-#' @param k 
-#' @param nThread 
+#' @param dat The data matrix to analyze
+#' @param k The estimated number of clusters, defaults to 30
+#' @param nThread The number of threads to use, defaults to 1
 #'
-#' @return
+#' @return The relations matrix
 #' @export
-#'
-#' @examples
-hnsw <- function( dat, k= 30, nThread= 5 ) {
+hnsw <- function( dat, k= 30, nThread= 1 ) {
     
     
     ind <- NULL
@@ -171,12 +162,10 @@ hnsw <- function( dat, k= 30, nThread= 5 ) {
 
 #' Louvain clustering
 #'
-#' @param relations 
+#' @param relations A relations matrix
 #'
-#' @return
+#' @return The community membership data frame
 #' @export
-#'
-#' @examples
 clusterLouvain <- function( relations ) {
     g <- igraph::graph.data.frame( relations, directed= FALSE )
     community <- igraph::cluster_louvain( g )
@@ -185,41 +174,40 @@ clusterLouvain <- function( relations ) {
     community$membership
 }
 
-#' Output data to file for running Grapallo
+#' Output data to file for running Grappolo
 #'
-#' @param relations 
-#' @param file 
-#' @param k 
-#' @param nThread 
+#' @param relations The relations matrix to output
+#' @param outFile The name of the file to output
+#' @param k The number of clusters
+#' @param nThread The number of cpus to use
 #'
-#' @return
+#' @return Returns the name of the file written
 #' @export
-#'
-#' @examples
-outputForGrapallo <-function(
-    relations, file, k,
+outputForGrappolo <-function(
+    relations, outFile, k,
     nThread= data.table::getDTthreads( FALSE )
 ) {
     nodes= nrow(relations)
     headerLine <- paste0( "# Nodes: ", nodes, " Edges: ", k * nodes )
-    writeLines( headerLine, file )
-    data.table::fwrite( relations, file, sep="\t", nThread= nThread, col.names=FALSE, append= TRUE )
+    writeLines( headerLine, outFile )
+    data.table::fwrite( relations, outFile, sep="\t", nThread= nThread, col.names=FALSE, append= TRUE )
+    outFile
 }
 
-#' Run Grapallo parallel louvain clustering
+#' Run Grappolo parallel louvain clustering
 #'
-#' @param file 
-#' @param exec 
-#' @param f 
-#' @param c 
-#' @param o 
-#' @param v 
+#' @param file The file to cluster
+#' @param exec Grappolo executable, either on the path or the full path.
+#' @param f The file type being read, as an integer. Defaults to 8 (SNAP format).
+#'   See `-f` in Grappolo
+#' @param c An integer, defaults to 1. See `-c` in Grappolo
+#' @param o Output? A boolean value, defaults to TRUE. See `-o` in Grappolo
+#' @param v A boolean value, defaults to TRUE. See `-v` in Grappolo
 #'
-#' @return
+#' @return The exits status of the external command running Grappolo. Should
+#' be 0 for success.
 #' @export
-#'
-#' @examples
-runGrapallo <- function(
+runGrappolo <- function(
     file,
     exec= "./bin/driverForGraphClustering",
     f= 8, c= 1, o= TRUE, v= TRUE

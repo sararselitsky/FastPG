@@ -1,4 +1,12 @@
-^data-raw$
+# Normal R package stuff
 ^LICENSE\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^README.html$
+
+# Rare but cannonical R package stuff (best practice/convention)
+^data-raw$
+
+# Custom excludes for this package only
+^Trials$
+

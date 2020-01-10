@@ -7,7 +7,12 @@
 parseCli(args = commandArgs(trailingOnly = TRUE))
 }
 \arguments{
-\item{args}{}
+\item{args}{A character vector of command line argument strings, usually
+\code{commandArgs( trailingOnly= TRUE )}}
+}
+\value{
+A list of options and their values, either set from the passed
+in args= vector or by default.
 }
 \description{
 Parse command line
