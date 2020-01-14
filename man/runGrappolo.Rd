@@ -4,8 +4,9 @@
 \alias{runGrappolo}
 \title{Run Grappolo parallel louvain clustering}
 \usage{
-runGrappolo(file, exec = "./bin/driverForGraphClustering", f = 8,
-  c = 1, o = TRUE, v = TRUE)
+runGrappolo(file, exec = "driverForGraphClustering", f = 8,
+  c = FALSE, o = FALSE, v = FALSE, s = FALSE, r = FALSE,
+  m = 100000L, d = 0.01, l = 1e-06)
 }
 \arguments{
 \item{file}{The file to cluster}
@@ -15,11 +16,21 @@ runGrappolo(file, exec = "./bin/driverForGraphClustering", f = 8,
 \item{f}{The file type being read, as an integer. Defaults to 8 (SNAP format).
 See \code{-f} in Grappolo}
 
-\item{c}{An integer, defaults to 1. See \code{-c} in Grappolo}
+\item{c}{An integer, defaults to FALSE. See \code{-c} in Grappolo}
 
-\item{o}{Output? A boolean value, defaults to TRUE. See \code{-o} in Grappolo}
+\item{o}{A boolean value, defaults to FALSE. See \code{-o} in Grappolo}
 
-\item{v}{A boolean value, defaults to TRUE. See \code{-v} in Grappolo}
+\item{v}{A boolean value, defaults to FALSE. See \code{-v} in Grappolo}
+
+\item{s}{A boolean value, defaults to FALSE. See \code{-s} in Grappolo}
+
+\item{r}{A boolean value, defaults to FALSE. See \code{-r} in Grappolo}
+
+\item{m}{An integer value, defaults to 100,000. See \code{-m} in Grappolo}
+
+\item{d}{A numeric value, defaults to 0.01. See \code{-d} in Grappolo}
+
+\item{l}{A numeric value, defaults to 0.000,001 See \code{-l} in Grappolo}
 }
 \value{
 The exits status of the external command running Grappolo. Should

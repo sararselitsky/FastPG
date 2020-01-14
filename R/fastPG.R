@@ -200,20 +200,29 @@ outputForGrappolo <-function(
 #' @param exec Grappolo executable, either on the path or the full path.
 #' @param f The file type being read, as an integer. Defaults to 8 (SNAP format).
 #'   See `-f` in Grappolo
-#' @param c An integer, defaults to 1. See `-c` in Grappolo
-#' @param o Output? A boolean value, defaults to TRUE. See `-o` in Grappolo
-#' @param v A boolean value, defaults to TRUE. See `-v` in Grappolo
+#' @param c An integer, defaults to FALSE. See `-c` in Grappolo
+#' @param o A boolean value, defaults to FALSE. See `-o` in Grappolo
+#' @param v A boolean value, defaults to FALSE. See `-v` in Grappolo
+#' @param s A boolean value, defaults to FALSE. See `-s` in Grappolo
+#' @param r A boolean value, defaults to FALSE. See `-r` in Grappolo
+#' @param m An integer value, defaults to 100,000. See `-m` in Grappolo
+#' @param d A numeric value, defaults to 0.01. See `-d` in Grappolo
+#' @param l A numeric value, defaults to 0.000,001 See `-l` in Grappolo
 #'
 #' @return The exits status of the external command running Grappolo. Should
 #' be 0 for success.
 #' @export
 runGrappolo <- function(
     file,
-    exec= "./bin/driverForGraphClustering",
-    f= 8, c= 1, o= TRUE, v= TRUE
+    exec= "driverForGraphClustering",
+    f= 8, c= FALSE, o= FALSE, v= FALSE, s= FALSE, r=FALSE,
+    m=100000L, d=0.01, l=0.000001
 ) {
-    o <- ifelse(o, "-o", NULL)
-    v <- ifelse(v, "-v", NULL)
-    argsVec= c("-f", f, -c, c, o, v, file)
-    system2(command = exec, argsVec)
+    c <- if (c) "-c" else NULL
+    o <- if (o) "-o" else NULL
+    v <- if (v) "-v" else NULL
+    s <- if (s) "-s" else NULL
+    r <- if (r) "-r" else NULL
+    argsVec= c("-f", f, c, o, v, s, r, "-m", m, "-d", d, "-l", l, file)
+    system2( command= exec, argsVec )
 }
