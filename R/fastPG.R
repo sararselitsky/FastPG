@@ -216,13 +216,13 @@ runGrappolo <- function(
     file,
     exec= "driverForGraphClustering",
     f= 8, c= FALSE, o= FALSE, v= FALSE, s= FALSE, r=FALSE,
-    m=100000L, d=0.01, l=0.000001
+    m=100000L, d=0.01, t=0.000001
 ) {
     c <- if (c) "-c" else NULL
     o <- if (o) "-o" else NULL
     v <- if (v) "-v" else NULL
     s <- if (s) "-s" else NULL
     r <- if (r) "-r" else NULL
-    argsVec= c("-f", f, c, o, v, s, r, "-m", m, "-d", d, "-l", l, file)
+    argsVec= c("-f", f, c, o, v, s, r, "-m", m, "-d", d, "-t", t, file)
     system2( command= exec, argsVec )
 }
