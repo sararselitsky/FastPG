@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 rcpp_parallel_jce <- function(mat) {
-    .Call(`_rgrappolo_rcpp_parallel_jce`, mat)
+    .Call(`_FastPG_rcpp_parallel_jce`, mat)
 }
 
 parallel_louvain <- function(links, num_vertices) {
-    .Call(`_rgrappolo_parallel_louvain`, links, num_vertices)
+    .Call(`_FastPG_parallel_louvain`, links, num_vertices)
 }
 

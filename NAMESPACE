@@ -1,4 +1,4 @@
-useDynLib(rgrappolo, .registration=TRUE)
+useDynLib(FastPG, .registration=TRUE)
 exportPattern("^[[:alpha:]]+")
 importFrom(Rcpp, evalCpp)
 importFrom(RcppParallel,RcppParallelLibs)

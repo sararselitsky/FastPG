@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // rcpp_parallel_jce
 NumericMatrix rcpp_parallel_jce(NumericMatrix mat);
-RcppExport SEXP _rgrappolo_rcpp_parallel_jce(SEXP matSEXP) {
+RcppExport SEXP _FastPG_rcpp_parallel_jce(SEXP matSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ END_RCPP
 }
 // parallel_louvain
 Rcpp::List parallel_louvain(NumericMatrix links, long num_vertices);
-RcppExport SEXP _rgrappolo_parallel_louvain(SEXP linksSEXP, SEXP num_verticesSEXP) {
+RcppExport SEXP _FastPG_parallel_louvain(SEXP linksSEXP, SEXP num_verticesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -30,12 +30,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rgrappolo_rcpp_parallel_jce", (DL_FUNC) &_rgrappolo_rcpp_parallel_jce, 1},
-    {"_rgrappolo_parallel_louvain", (DL_FUNC) &_rgrappolo_parallel_louvain, 2},
+    {"_FastPG_rcpp_parallel_jce", (DL_FUNC) &_FastPG_rcpp_parallel_jce, 1},
+    {"_FastPG_parallel_louvain", (DL_FUNC) &_FastPG_parallel_louvain, 2},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_rgrappolo(DllInfo *dll) {
+RcppExport void R_init_FastPG(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
