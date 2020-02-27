@@ -1,15 +1,23 @@
-Package: rgrappolo
-Type: Package
-Title: What the Package Does in One 'Title Case' Line
-Version: 1.0
-Date: 2020-02-26
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does as one or more full sentences.
-License: GPL (>= 2)
-Imports: Rcpp (>= 1.0.3), RcppParallel (>= 4.4.4)
-LinkingTo: Rcpp, RcppParallel
+Package: FastPG
+Title: Fast PhenoGraph-like clustering
+Version: 0.0.1.9000
+Date: 2020-02-27
+Authors@R: c(
+    person( "Stuart", "Jefferys", role= c("aut", "cre"), email= "srj@unc.edu" ),
+    person( "Sara", "Selitsky", role= "aut" ),
+    person( "Tom", "Bodenheimer", role= "aut" ))
+Description: Clusters millions of elements with dozens of features quickly.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+    Rcpp,
+    RcppParallel,
+    flowCore,
+    checkmate,
+    nmslibR
+LinkingTo: 
+    Rcpp,
+    RcppParallel
 SystemRequirements: GNU make
 NeedsCompilation: yes
-Packaged: 2020-02-26 18:02:18 UTC; bodenhei
-Depends: R (>= 3.5.0)
