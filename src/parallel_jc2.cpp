@@ -69,6 +69,12 @@ struct Jce : public Worker {
     }
   }
 };
+
+//' Parallel Jaccard similarity index
+//'
+//' @param mat A numeric matrix of values
+//' @return A numeric matrix of values
+//' @export
 // [[Rcpp::export]]
 NumericMatrix rcpp_parallel_jce(NumericMatrix mat) {
   

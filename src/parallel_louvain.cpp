@@ -388,6 +388,15 @@ return final_modularity;
 }//End of main()
 
 
+//' Parallel Louvain clustering
+//'
+//' @param links A numeric matrix of network edges
+//' @param num_vertices The number of nodes
+//' @return A list with two elements
+//' * `modularity` - 
+//' * `communities` - A vector where the i'th value is the
+//'   cluster number that the i'th node in the links matrix has been assigned to.
+//' @export
 // [[Rcpp::export]]
 Rcpp::List parallel_louvain(NumericMatrix links, long num_vertices){
   NumericVector res(num_vertices);
