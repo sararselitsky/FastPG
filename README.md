@@ -45,7 +45,7 @@ Load the data to cluster into a matrix, rows will be matched by index to cluster
 [TODO: Include a function to pull a sample data file for use]
 
 ```
-file <- "someFile.FCS""
+file <- "someFile.FCS"
 dataColumns <- c( 5:35 ) # extract only the data columns, whatever they are
 dat <-  flowCore::exprs( flowCore::read.FCS( file ))[ , dataColumns ]
 ```

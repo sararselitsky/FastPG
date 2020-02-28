@@ -1,7 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// [[Rcpp::depends(RcppParallel)]]
 #include <RcppParallel.h>
 #include <vector>
 #include <algorithm>

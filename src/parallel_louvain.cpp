@@ -1,9 +1,5 @@
-// [[Rcpp::plugins(cpp11)]]
 #include <Rcpp.h>
 #include <omp.h>
-
-// [[Rcpp::plugins(openmp)]]
-
 #include<iostream>
 
 #include "defs.h"

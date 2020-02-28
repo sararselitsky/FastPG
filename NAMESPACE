@@ -2,6 +2,6 @@
 
 export(parallel_louvain)
 export(rcpp_parallel_jce)
-importFrom(Rcpp,sourceCpp)
+importFrom(Rcpp,evalCpp)
 importFrom(RcppParallel,RcppParallelLibs)
 useDynLib(FastPG, .registration = TRUE)
