@@ -10,7 +10,7 @@ using namespace Rcpp;
 
 using namespace RcppParallel;
 
-auto removeNANs = [&](double number) -> bool
+auto removeNANs = [](double number) -> bool
 {
   return std::isnan(number);
 };
