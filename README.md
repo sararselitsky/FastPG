@@ -23,7 +23,7 @@ docker run -it --rm -v $PWD:$PWD -w $PWD jefferys/fastpg:latest
 R
    # or
 singularity pull docker://jefferys/FastPG:latest
-singularity shell -B $PWD -C fastpg-latest.simg
+singularity shell -B $PWD --pwd $PWD -C fastpg-latest.simg
 R
 ```
 
