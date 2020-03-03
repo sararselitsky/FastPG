@@ -20,7 +20,7 @@
 #' @export
 fastCluster <- function( data, k= 30, num_threads= 1 ) {
   init_nms <- nmslibR::NMSlib$new( input_data= data, space= 'l2', method= 'hnsw' )
-  res <- init_nms$knn_Query_Batch( dat, k= k, num_threads= num_threads )
+  res <- init_nms$knn_Query_Batch( data, k= k, num_threads= num_threads )
   ind <- res$knn_idx
   
   links <- FastPG::rcpp_parallel_jce(ind)
