@@ -63,24 +63,31 @@ Set the number of threads/cores to use: [TODO, defaults]
 num_threads <- 4
 ```
 
-Run the following sequence of commands: [TODO - make this an exported function]
+Cluster the data:
 
 ```
-init_nms <- nmslibR::NMSlib$new( input_data= dat, space= 'l2', method= 'hnsw' )
-	res <- init_nms$knn_Query_Batch( dat, k= k, num_threads= num_threads )
-	ind <- res$knn_idx
-
-	links <- FastPG::rcpp_parallel_jce(ind)
-	links <- links[ links[, 1] != 0 ]
-	links <- matrix( links, ncol= 3 )
-
-	num_nodes <- length( union( links[, 1], links[, 2] ))
-
-	clusters <- rgrappolo::parallel_louvain( links, num_nodes )
+clusters <- FastPG::fastCluster( data, k, num_threads )
 ```
 
-returns a list with two elements
+This returns a list with two elements
 
 * `$modularity` = [TODO...]
 * `$communities` = An integer vector where the nth element is the nth element in the input data. Its value is the cluster that input element has been assigned to.
+
+Calling `fastCluster()`  is equivalent to the following sequence of commands:
+
+```
+init_nms <- nmslibR::NMSlib$new( input_data= dat, space= 'l2', method= 'hnsw' )
+res <- init_nms$knn_Query_Batch( dat, k= k, num_threads= num_threads )
+ind <- res$knn_idx
+
+links <- FastPG::rcpp_parallel_jce(ind)
+links <- links[ links[, 1] != 0 ]
+links <- matrix( links, ncol= 3 )
+
+num_nodes <- length( union( links[, 1], links[, 2] ))
+
+clusters <- FastPG::parallel_louvain( links, num_nodes )
+```
+
 
