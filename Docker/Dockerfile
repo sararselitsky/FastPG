@@ -47,11 +47,9 @@ RUN R -e 'BiocManager::install( \
 
 # At end as args breaks all following caching. Timestamp changes every time...
 
-ARG buildVersion
 ARG imageCreated
 ARG toolVersion
 
-ARG baseVersion="3.10"
 ARG toolSource="https://github.com/sararselitsky/FastPG/tree/dev"
 ARG tool="fastpg"
 ARG brief="${tool} - Container for running the R package FastPG."
@@ -65,7 +63,6 @@ LABEL org.opencontainers.image.source="https://github.com/jefferys/Dockers/ToolD
 LABEL org.opencontainers.image.version="${toolVersion}"
 LABEL org.opencontainers.image.vendor="UNC - Lineberger"
 LABEL org.opencontainers.image.licenses="${toolLicense}"
-LABEL org.opencontainers.image.ref.name="${tool}:${baseVersion}_${toolVersion}"
 LABEL org.opencontainers.image.title="${brief}"
 LABEL org.opencontainers.image.description="The fastpg R package for clustering large sample sets (millions) with intermediate features (order of 100). Includes source from Grappolo, BSD-3 licensed from Pacific Northwest National Laboratory"
 

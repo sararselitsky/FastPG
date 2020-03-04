@@ -50,13 +50,13 @@ Note that you should consider this container version like an "application" and n
 
 ### Building your own Docker container
 
-If you want to build your own container instead of pulling a pre-build one, you can use the `Dockerfile` included in the repository in the `Docker/` directory as a guide. The `build.sh` file in the same directory automatically builds and tags the container with the names used by the pre-build container at DockerHub, you should change these by editing the parameters in the build.sh file, or manually building it and tagging it yourself.
+If you want to build your own container instead of pulling a pre-build one, you can use the `Dockerfile` included in the repository in the `Docker/` directory as a guide. The `build.sh` file in the same directory automatically builds and tags the container with the name and tags used by the pre-built container at DockerHub, you should change the tags by editing the parameters in the build.sh file, or manually building it and tagging it yourself.
 
 ```
 git clone --single-branch --branch rgrappolo https://github.com/sararselitsky/FastPG.git
 cd FastPG/Docker
 # Edit docker tags in build.sh for your use
-build.sh --no-cache
+./build.sh --no-cache
 ```
 
 You can just use this with docker as above, but you can't just use a local docker container with singularity versions less than 3.0. You have to push the container to some docker registry before you can run it. With 3.0+ you can pull a local container directly by using `docker-daemon://` instead of `docker://` to get a local container.
