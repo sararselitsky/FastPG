@@ -1,6 +1,6 @@
 Package: FastPG
 Title: Fast PhenoGraph-like clustering
-Version: 0.0.1.9000
+Version: 0.0.2.9000
 Date: 2020-02-27
 Authors@R: c(
     person( "Stuart", "Jefferys", role= c("aut", "cre"), email= "srj@unc.edu" ),

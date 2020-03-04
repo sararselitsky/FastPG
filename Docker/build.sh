@@ -4,7 +4,7 @@
 
 imageMaintainer="Stuart R. Jefferys <srj@unc.edu>"
 imageCreated="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-read buildVersion < "../../VERSION"
+buildVersion="0.0.2"
 
 context="."
 name="fastpg"

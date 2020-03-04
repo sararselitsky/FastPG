@@ -7,7 +7,13 @@ Fast phenograph-like clustering of millions of items with scores of features.
 
 ## Installation
 
-This R package has dependencies outside of R, e.g. on a python package that wraps a library, `nmslibs`. If you have set up the dependencies, you can just install this from
+This R package has dependencies outside of R, e.g. on a python package that wraps a library, `nmslibs`. You can either set up the dependencies and install locally, pull down a prebuilt docker if you have a modern system, or build the docker container yourself locally.
+
+### Local install
+
+[TODO: Set up dependencies]
+
+If you have the dependencies, you can just install this from
 GitHub in one of the normal ways. My favorite is:
 
 ```
@@ -15,28 +21,38 @@ GitHub in one of the normal ways. My favorite is:
 BiocManager::install("sararselitsky/FastPG@rgrappolo")
 ```
 
-A simpler way is to use a Docker container that is already set up and has the package pre-installed. You can just run it interactively, using the R command line inside it. To use the pre-built FastPG container on DockerHub:
+### Use a pre-built Docker container
+
+A simpler way is to use a Docker container, `jefferys/fastpg:latest`, that is already set up and has the package pre-installed. You can just run it interactively, using the R command line inside it. To use the pre-built FastPG container on DockerHub you should run on a 64 bit intel/amd compatible machine with cpus that support the SSE3, SSE4.1, SSE4.2, and AVX instructions. This should be true for most systems. See "Building your own container" if if you have an older system, or if you want to take advantage of the AVX2 instructions.
 
 ```
-docker pull jefferys/FastPG:latest
+docker pull jefferys/fastpg:latest
 docker run -it --rm -v $PWD:$PWD -w $PWD jefferys/fastpg:latest
 R
    # or
-singularity pull docker://jefferys/FastPG:latest
+singularity pull docker://jefferys/fastpg:latest
 singularity shell -B $PWD --pwd $PWD -C fastpg-latest.simg
 R
 ```
 
-You can also build a docker container from the `Dockerfile` included in the repository. The `build.sh` file in the `Docker/` directory automatically tags the container you build with the same names as used at DockerHub.
+Note that you should consider this container version like an "application" and not an environment. You will likely have problems installing additional packages into it. To do that, see "Extending the container".
+
+### Building your own container
+
+If you want to build your own container instead of pulling a pre-build one, you can use the `Dockerfile` included in the repository in the `Docker/` directory. The `build.sh` file in the same directory automatically tags the container you build with the names used at DockerHub, you can change these by editing the parameters in the build.sh file. This should automatically build a version that supports the cpu family of the machine built on.
 
 ```
 git clone --single-branch --branch rgrappolo https://github.com/sararselitsky/FastPG.git
 cd FastPG/Docker
-build.sh
+# Edit docker build tags in build.sh for your use
+build.sh --no-cache
 ```
 
-You can just use this with docker as above, but you can't just use a local docker container with singularity versions less than 3.0. You have to push the container to some docker registry before you can run it. With 3.0+ you can pull a local container directly by using `docker-daemon://` instead of `docker://` to get a local container
+You can just use this with docker as above, but you can't just use a local docker container with singularity versions less than 3.0. You have to push the container to some docker registry before you can run it. With 3.0+ you can pull a local container directly by using `docker-daemon://` instead of `docker://` to get a local container.
 
+### Extending the container
+
+If you want to add additional things to the container, you must build your own. You can extend the existing container either by editing the Dockerfile or by using the existing container as the FROM to base your own docker container on.
 
 ## Running FastPG
 
@@ -77,8 +93,8 @@ This returns a list with two elements
 Calling `fastCluster()`  is equivalent to the following sequence of commands:
 
 ```
-init_nms <- nmslibR::NMSlib$new( input_data= dat, space= 'l2', method= 'hnsw' )
-res <- init_nms$knn_Query_Batch( dat, k= k, num_threads= num_threads )
+init_nms <- nmslibR::NMSlib$new( input_data= data, space= 'l2', method= 'hnsw' )
+res <- init_nms$knn_Query_Batch( data, k= k, num_threads= num_threads )
 ind <- res$knn_idx
 
 links <- FastPG::rcpp_parallel_jce(ind)
@@ -90,4 +106,4 @@ num_nodes <- length( union( links[, 1], links[, 2] ))
 clusters <- FastPG::parallel_louvain( links, num_nodes )
 ```
 
-
+## References

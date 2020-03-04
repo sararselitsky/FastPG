@@ -13,8 +13,9 @@ RUN apt-get update \
       python3-wheel
 
 RUN pip3 install \
-            leidenalg \
-            nmslib==2.0.5
+            leidenalg
+
+RUN pip3 install --no-binary :all: nmslib==2.0.5
 
 RUN R -e 'BiocManager::install( \
     c( "flowCore", "data.table", "RANN", "Rcpp", "RcppParallel", \
