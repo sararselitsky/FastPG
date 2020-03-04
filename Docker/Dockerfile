@@ -49,8 +49,9 @@ RUN R -e 'BiocManager::install( \
 
 ARG buildVersion
 ARG imageCreated
+ARG toolVersion
 
-ARG toolVersion="3.10"
+ARG baseVersion="3.10"
 ARG toolSource="https://github.com/sararselitsky/FastPG/tree/dev"
 ARG tool="fastpg"
 ARG brief="${tool} - Container for running the R package FastPG."
@@ -64,13 +65,13 @@ LABEL org.opencontainers.image.source="https://github.com/jefferys/Dockers/ToolD
 LABEL org.opencontainers.image.version="${toolVersion}"
 LABEL org.opencontainers.image.vendor="UNC - Lineberger"
 LABEL org.opencontainers.image.licenses="${toolLicense}"
-LABEL org.opencontainers.image.ref.name="${tool}:${toolVersion}_${buildVersion}"
+LABEL org.opencontainers.image.ref.name="${tool}:${baseVersion}_${toolVersion}"
 LABEL org.opencontainers.image.title="${brief}"
-LABEL org.opencontainers.image.description="The fastpg R package for clustering large sample sets (millions) with intermediate features (order of 100)."
+LABEL org.opencontainers.image.description="The fastpg R package for clustering large sample sets (millions) with intermediate features (order of 100). Includes source from Grappolo, BSD-3 licensed from Pacific Northwest National Laboratory"
 
 # https://github.com/BioContainers/specs/blob/master/container-specs.md
 LABEL base_image="jefferys/bioconductor:3.10_latest"
-LABEL version="${buildVersion}"
+LABEL version="${toolVersion}"
 LABEL software.version="${toolVersion}"
 LABEL software="${tool}"
 LABEL about.summary="${brief}"

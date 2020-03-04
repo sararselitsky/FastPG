@@ -60,7 +60,7 @@ void generateRandomNumbers(double *RandVec, long size) {
     
     long block = size / nT;
 #ifdef PRINT_DETAILED_STATS_
-    cout<<"Each thread will add "<<block<<" edges\n";
+    //cout<<"Each thread will add "<<block<<" edges\n";
 #endif
     //Each thread will generate m/nT edges each
     double start = omp_get_wtime();

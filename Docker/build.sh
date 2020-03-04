@@ -4,22 +4,22 @@
 
 imageMaintainer="Stuart R. Jefferys <srj@unc.edu>"
 imageCreated="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-buildVersion="0.0.2"
-
 context="."
 name="fastpg"
-toolVersion="3.10"
-domain="jefferys"
+baseVersion="3.10"  # Bioconductor
+toolVersion="0.0.3" # This R package version
+domain="jefferys"   # GitHub account
 
-fullName="${domain}/${name}"
-imageTag="${toolVersion}_${buildVersion}"
+TAG1="${domain}/${name}:${toolVersion}_${buildVersion}"
+TAG2="${domain}/${name}:${toolVersion}_latest"
+TAG3="${domain}/${name}:latest"
 
 docker build \
+             --build-arg baseVersion="${baseVersion}" \
              --build-arg toolVersion="${toolVersion}" \
-             --build-arg buildVersion="${buildVersion}" \
              --build-arg imageCreated="${imageCreated}" \
-             -t "${fullName}:${imageTag}" \
-             -t "${fullName}:${toolVersion}_latest" \
-             -t "${fullName}:latest" \
+             -t "$TAG1" \
+             -t "$TAG2" \
+             -t "$TAG3" \
              $@ \
              "${context}"
