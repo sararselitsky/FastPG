@@ -408,7 +408,7 @@ Rcpp::List parallel_louvain(NumericMatrix links, long num_vertices){
   modularity = find_communities(G,C_orig);
   
   for(auto it = clusterLocalMap.begin();it != clusterLocalMap.end(); ++it){
-    res[it->first]=(int)C_orig[it->second];
+    res[it->first-1]=(int)C_orig[it->second];
   }
   
   //printf("%d is the length of res 1\n",res.length());
