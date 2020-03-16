@@ -123,10 +123,8 @@ links <- FastPG::rcpp_parallel_jce(ind)
 links <- links[ links[, 1] != 0 ]
 links <- matrix( links, ncol= 3 )
 
-num_nodes <- length( union( links[, 1], links[, 2] ))
-
 # Parallel Louvain clustering
-clusters <- FastPG::parallel_louvain( links, num_nodes )
+clusters <- FastPG::parallel_louvain( links )
 ```
 
 ## References

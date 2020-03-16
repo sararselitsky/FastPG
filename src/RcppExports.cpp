@@ -17,21 +17,20 @@ BEGIN_RCPP
 END_RCPP
 }
 // parallel_louvain
-Rcpp::List parallel_louvain(NumericMatrix links, long num_vertices);
-RcppExport SEXP _FastPG_parallel_louvain(SEXP linksSEXP, SEXP num_verticesSEXP) {
+Rcpp::List parallel_louvain(NumericMatrix links);
+RcppExport SEXP _FastPG_parallel_louvain(SEXP linksSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type links(linksSEXP);
-    Rcpp::traits::input_parameter< long >::type num_vertices(num_verticesSEXP);
-    rcpp_result_gen = Rcpp::wrap(parallel_louvain(links, num_vertices));
+    rcpp_result_gen = Rcpp::wrap(parallel_louvain(links));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_FastPG_rcpp_parallel_jce", (DL_FUNC) &_FastPG_rcpp_parallel_jce, 1},
-    {"_FastPG_parallel_louvain", (DL_FUNC) &_FastPG_parallel_louvain, 2},
+    {"_FastPG_parallel_louvain", (DL_FUNC) &_FastPG_parallel_louvain, 1},
     {NULL, NULL, 0}
 };
 
