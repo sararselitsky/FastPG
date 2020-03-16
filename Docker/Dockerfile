@@ -15,7 +15,7 @@ RUN apt-get update \
 RUN pip3 install \
             leidenalg
 
-RUN pip3 install --no-binary :all: nmslib==2.0.5
+RUN pip3 install nmslib==2.0.5
 
 RUN R -e 'BiocManager::install( \
     c( "flowCore", "data.table", "RANN", "Rcpp", "RcppParallel", \
@@ -49,6 +49,7 @@ RUN R -e 'BiocManager::install( \
 
 ARG imageCreated
 ARG toolVersion
+ARG baseVersion="3.10"
 
 ARG toolSource="https://github.com/sararselitsky/FastPG/tree/dev"
 ARG tool="fastpg"

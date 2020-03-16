@@ -6,16 +6,20 @@ imageMaintainer="Stuart R. Jefferys <srj@unc.edu>"
 imageCreated="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
 context="."
 name="fastpg"
-toolVersion="0.0.3" # This R package version
+baseVersion="3.10"  # The bioconductor version
+toolVersion="0.0.4" # This R package version
 domain="jefferys"   # GitHub account
 
-TAG1="${domain}/${name}:${toolVersion}"
-TAG2="${domain}/${name}:latest"
+TAG1="${domain}/${name}:${baseVersion}_${toolVersion}"
+TAG2="${domain}/${name}:${baseVersion}_latest"
+TAG3="${domain}/${name}:latest"
 
 docker build \
              --build-arg toolVersion="${toolVersion}" \
              --build-arg imageCreated="${imageCreated}" \
+             --build-arg imageCreated="${baseVersion}" \
              -t "$TAG1" \
              -t "$TAG2" \
+             -t "$TAG3" \
              $@ \
              "${context}"
