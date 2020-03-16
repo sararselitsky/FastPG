@@ -12,7 +12,7 @@
 #include <set>
 using namespace Rcpp;
 
-void parse_SNAP(graph * G, NumericMatrix links, long num_vertices,std::unordered_map<long, long> &clusterLocalMap) {
+void parse_SNAP(graph * G, NumericMatrix links, std::unordered_map<long, long> &clusterLocalMap) {
  // printf("Parsing a SNAP formatted file as a general graph...\n");
  // printf("WARNING: Assumes that the graph is directed -- an edge is stored only once.\n");
  // printf("       : Graph will be stored as undirected, each edge appears twice.\n");
@@ -56,7 +56,6 @@ double time1, time2;
 } while ( comment == '#');*/
 
 NE = links.nrow();
-NV = num_vertices;
 
 //printf("|V|= %ld, |E|= %ld \n", NV, NE);
 //printf("Weights will read from the file.\n");
@@ -387,23 +386,25 @@ return final_modularity;
 //' Parallel Louvain clustering
 //'
 //' @param links A numeric matrix of network edges
-//' @param num_vertices The number of nodes
 //' @return A list with two elements
 //' * `modularity` - 
 //' * `communities` - A vector where the i'th value is the
 //'   cluster number that the i'th node in the links matrix has been assigned to.
 //' @export
 // [[Rcpp::export]]
-Rcpp::List parallel_louvain(NumericMatrix links, long num_vertices){
-  NumericVector res(num_vertices);
+Rcpp::List parallel_louvain(NumericMatrix links){
+
   double modularity = -1;
+
   graph* G = (graph *) malloc (sizeof(graph));
   
   std::unordered_map<long,long> clusterLocalMap;
   
-  parse_SNAP(G,links,num_vertices,clusterLocalMap);
+  parse_SNAP(G,links,clusterLocalMap);
+
+  NumericVector res(G->numVertices);
   
-  long *C_orig = (long *) malloc (num_vertices * sizeof(long)); assert(C_orig != 0);
+  long *C_orig = (long *) malloc (G->numVertices * sizeof(long)); assert(C_orig != 0);
   
   modularity = find_communities(G,C_orig);
   
@@ -411,8 +412,6 @@ Rcpp::List parallel_louvain(NumericMatrix links, long num_vertices){
     res[it->first-1]=(int)C_orig[it->second];
   }
   
-  //printf("%d is the length of res 1\n",res.length());
-
   return Rcpp::List::create(Rcpp::Named("modularity")=modularity,
                             Rcpp::Named("communities")=res);
 }

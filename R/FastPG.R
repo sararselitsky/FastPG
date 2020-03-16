@@ -27,7 +27,5 @@ fastCluster <- function( data, k= 30, num_threads= 1 ) {
   links <- links[ links[, 1] != 0 ]   
   links <- matrix( links, ncol= 3 )
   
-  num_nodes <- length( union( links[, 1], links[, 2] ))
-  
-  FastPG::parallel_louvain( links, num_nodes ) 
+  FastPG::parallel_louvain( links ) 
 }
