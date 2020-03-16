@@ -4,12 +4,10 @@
 \alias{parallel_louvain}
 \title{Parallel Louvain clustering}
 \usage{
-parallel_louvain(links, num_vertices)
+parallel_louvain(links)
 }
 \arguments{
 \item{links}{A numeric matrix of network edges}
-
-\item{num_vertices}{The number of nodes}
 }
 \value{
 A list with two elements
