@@ -39,7 +39,7 @@ RUN R -e 'BiocManager::install( \
 #    rm -r /usr/local/grappolo-latest
 
 RUN R -e 'BiocManager::install( \
-    c( "sararselitsky/FastPG@rgrappolo" ), \
+    c( "sararselitsky/FastPG" ), \
     update= FALSE, \
     ask= FALSE, \
     version= "3.10" \
@@ -49,7 +49,6 @@ RUN R -e 'BiocManager::install( \
 
 ARG imageCreated
 ARG toolVersion
-ARG baseVersion="3.10"
 
 ARG toolSource="https://github.com/sararselitsky/FastPG/tree/dev"
 ARG tool="fastpg"

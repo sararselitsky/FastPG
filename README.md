@@ -75,7 +75,7 @@ The main input is the numeric data to cluster as a matrix, where rows are elemen
 
 ```{r}
 url <- "https://github.com/lmweber/benchmark-data-Levine-32-dim/raw/master/data/Levine_32dim.fcs"
-file <- file.path( tempdir(), "Levine_32dim.fcs" )
+file <- "Levine_32dim.fcs"
 download.file( url, file, mode="wb") # This downloads a 41.5 MB binary file
 dataColumns <- c( 5:36 ) # extract only the data columns, whatever they are
 data <-  flowCore::exprs( flowCore::read.FCS( file ))[ , dataColumns ]

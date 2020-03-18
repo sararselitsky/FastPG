@@ -17,7 +17,6 @@ TAG3="${domain}/${name}:latest"
 docker build \
              --build-arg toolVersion="${toolVersion}" \
              --build-arg imageCreated="${imageCreated}" \
-             --build-arg imageCreated="${baseVersion}" \
              -t "$TAG1" \
              -t "$TAG2" \
              -t "$TAG3" \
