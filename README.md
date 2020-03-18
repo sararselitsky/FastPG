@@ -49,7 +49,7 @@ Note that you should consider this container version like an "application" and n
 If you want to build your own container instead of pulling a pre-build one, you can use the `Dockerfile` included in the repository in the `Docker/` directory as a guide. The `build.sh` file in the same directory automatically builds and tags the container with the name and tags used by the pre-built container at DockerHub, you should change the tags by editing the parameters in the `build.sh` file, or by manually building it and tagging it yourself.
 
 ```{bash}
-git clone --single-branch --branch rgrappolo https://github.com/sararselitsky/FastPG.git
+git clone --single-branch https://github.com/sararselitsky/FastPG.git
 cd FastPG/Docker
 # Edit Docker tags in build.sh for your use
 ./build.sh --no-cache
