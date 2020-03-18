@@ -1,4 +1,21 @@
-# Introduction to FastPG
+---
+title: "Introduction to FastPG"
+output: rmarkdown::html_vignette
+bibliography: fastpg.bib
+vignette: >
+  %\VignetteIndexEntry{Introduction to FastPG}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  include = TRUE,
+  eval = FALSE
+)
+```
 
 Fast phenograph-like clustering of millions of items with scores of features.
 
@@ -131,15 +148,3 @@ clusters <- FastPG::parallel_louvain( links )
 ```
 
 ## References
-
-Boytsov, Leonid, and Bilegsaikhan Naidan. 2013. “Engineering Efficient and Effective Non-Metric Space Library.” In *Similarity Search and Applications - 6th International Conference, SISAP 2013, A Coruña, Spain, October 2-4, 2013, Proceedings*, edited by Nieves R. Brisaboa, Oscar Pedreira, and Pavel Zezula, 8199:280–93. Lecture Notes in Computer Science. Springer. https://doi.org/10.1007/978-3-642-41062-8_28.
-
-Chen, Hao, Mai Chan Lau, Michael Thomas Wong, Evan W Newell, Michael Poidinger, and Jinmiao Chen. 2016. *“Cytofkit: A Bioconductor Package for an Integrated Mass Cytometry Data Analysis Pipeline.”* PLoS Comput Biol 12 (9).
-
-Levine, Jacob H, Erin F Simonds, Sean C Bendall, Kara L Davis, El-ad D Amir, Michelle D Tadmor, Oren Litvin, et al. 2015. “Data-Driven Phenotypic Dissection of Aml Reveals Progenitor-Like Cells That Correlate with Prognosis.” *Cell* 162 (1): 184–97. https://doi.org/10.1016/j.cell.2015.05.047.
-
-Lu, Hao, Mahantesh Halappanavar, and Ananth Kalyanaraman. 2015. “Parallel Heuristics for Scalable Community Detection.” *Parallel Computing* 47: 19–37. https://doi.org/https://doi.org/10.1016/j.parco.2015.03.003.
-
-Malkov, Yury A., and D. A. Yashunin. 2016. “Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs.” *CoRR* abs/1603.09320. http://arxiv.org/abs/1603.09320.
-
-Mouselimis, Lampros. 2018. *NmslibR: Non Metric Space (Approximate) Library.* https://CRAN.R-project.org/package=nmslibR.
