@@ -1,12 +1,27 @@
 %% This BibTeX bibliography file was created using BibDesk.
 %% https://bibdesk.sourceforge.io/
 
-%% Created for Stuart R. Jefferys at 2020-03-10 16:46:39 -0400 
+%% Created for Stuart R. Jefferys at 2020-03-17 23:29:00 -0400 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
 
+
+@article{Chen-2016,
+	Abstract = {Single-cell mass cytometry significantly increases the dimensionality of cytometry analysis as compared to fluorescence flow cytometry, providing unprecedented resolution of cellular diversity in tissues. However, analysis and interpretation of these high-dimensional data poses a significant technical challenge. Here, we present cytofkit, a new Bioconductor package, which integrates both state-of-the-art bioinformatics methods and in-house novel algorithms to offer a comprehensive toolset for mass cytometry data analysis. Cytofkit provides functions for data pre-processing, data visualization through linear or non-linear dimensionality reduction, automatic identification of cell subsets, and inference of the relatedness between cell subsets. This pipeline also provides a graphical user interface (GUI) for ease of use, as well as a shiny application (APP) for interactive visualization of cell subpopulations and progression profiles of key markers. Applied to a CD14-CD19- PBMCs dataset, cytofkit accurately identified different subsets of lymphocytes; applied to a human CD4+ T cell dataset, cytofkit uncovered multiple subtypes of TFH cells spanning blood and tonsils. Cytofkit is implemented in R, licensed under the Artistic license 2.0, and freely available from the Bioconductor website, https://bioconductor.org/packages/cytofkit/. Cytofkit is also applicable for flow cytometry data analysis.},
+	Author = {Chen, Hao and Lau, Mai Chan and Wong, Michael Thomas and Newell, Evan W and Poidinger, Michael and Chen, Jinmiao},
+	Date-Added = {2020-03-17 22:14:49 -0400},
+	Date-Modified = {2020-03-17 22:16:01 -0400},
+	Journal = {PLoS Comput Biol},
+	Month = {Sep},
+	Number = {9},
+	Pmc = {PMC5035035},
+	Pmid = {27662185},
+	Title = {Cytofkit: A Bioconductor Package for an Integrated Mass Cytometry Data Analysis Pipeline.},
+	Volume = {12},
+	Year = {2016},
+	Bdsk-Url-1 = {https://doi.org/10.1371/journal.pcbi.1005112}}
 
 @article{Lu-2015,
 	Abstract = {Community detection has become a fundamental operation in numerous graph-theoretic applications. It is used to reveal natural divisions that exist within real world networks without imposing prior size or cardinality constraints on the set of communities. Despite its potential for application, there is only limited support for community detection on large-scale parallel computers, largely owing to the irregular and inherently sequential nature of the underlying heuristics. In this paper, we present parallelization heuristics for fast community detection using the Louvain method as the serial template. The Louvain method is a multi-phase, iterative heuristic for modularity optimization. Originally developed by Blondel et al. (2008), the method has become increasingly popular owing to its ability to detect high modularity community partitions in a fast and memory-efficient manner. However, the method is also inherently sequential, thereby limiting its scalability. Here, we observe certain key properties of this method that present challenges for its parallelization, and consequently propose heuristics that are designed to break the sequential barrier. For evaluation purposes, we implemented our heuristics using OpenMP multithreading, and tested them over real world graphs derived from multiple application domains (e.g., internet, citation, biological). Compared to the serial Louvain implementation, our parallel implementation is able to produce community outputs with a higher modularity for most of the inputs tested, in comparable number or fewer iterations, while providing absolute speedups of up to 16× using 32 threads.},
@@ -50,8 +65,8 @@
 	Biburl = {https://dblp.org/rec/conf/sisap/BoytsovN13.bib},
 	Booktitle = {Similarity Search and Applications - 6th International Conference, {SISAP} 2013, {A} Coru{\~{n}}a, Spain, October 2-4, 2013, Proceedings},
 	Date-Added = {2020-03-05 18:21:05 -0500},
-	Date-Modified = {2020-03-05 18:21:09 -0500},
-	Doi = {10.1007/978-3-642-41062-8\_28},
+	Date-Modified = {2020-03-17 23:15:19 -0400},
+	Doi = {10.1007/978-3-642-41062-8_28},
 	Editor = {Nieves R. Brisaboa and Oscar Pedreira and Pavel Zezula},
 	Pages = {280--293},
 	Publisher = {Springer},
@@ -61,7 +76,7 @@
 	Url = {https://doi.org/10.1007/978-3-642-41062-8\_28},
 	Volume = {8199},
 	Year = {2013},
-	Bdsk-Url-1 = {https://doi.org/10.1007/978-3-642-41062-8%5C_28}}
+	Bdsk-Url-1 = {https://doi.org/10.1007/978-3-642-41062-8_28}}
 
 @manual{Mouselimis-2018,
 	Author = {Lampros Mouselimis},
