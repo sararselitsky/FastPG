@@ -1,0 +1,30 @@
+Package: FastPG
+Title: Fast PhenoGraph-like clustering
+Version: 0.0.4.9000
+Date: 2020-02-27
+Authors@R: c(
+    person( "Stuart", "Jefferys", role= c("aut", "cre"), email= "srj@unc.edu" ),
+    person( "Sara", "Selitsky", role= "aut" ),
+    person( "Tom", "Bodenheimer", role= "aut" ))
+Description: Clusters millions of elements with dozens of features quickly.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+    Rcpp (>= 1.0.3),
+    RcppParallel (>= 4.4.4),
+    flowCore,
+    checkmate,
+    nmslibR
+LinkingTo: 
+    Rcpp,
+    RcppParallel
+SystemRequirements: GNU make
+NeedsCompilation: yes
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.2
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Depends: R (>= 3.5.0)

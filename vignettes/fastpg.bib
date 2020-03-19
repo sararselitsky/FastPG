@@ -1,0 +1,105 @@
+%% This BibTeX bibliography file was created using BibDesk.
+%% https://bibdesk.sourceforge.io/
+
+%% Created for Stuart R. Jefferys at 2020-03-17 23:29:00 -0400 
+
+
+%% Saved with string encoding Unicode (UTF-8) 
+
+
+
+@article{Chen-2016,
+	Abstract = {Single-cell mass cytometry significantly increases the dimensionality of cytometry analysis as compared to fluorescence flow cytometry, providing unprecedented resolution of cellular diversity in tissues. However, analysis and interpretation of these high-dimensional data poses a significant technical challenge. Here, we present cytofkit, a new Bioconductor package, which integrates both state-of-the-art bioinformatics methods and in-house novel algorithms to offer a comprehensive toolset for mass cytometry data analysis. Cytofkit provides functions for data pre-processing, data visualization through linear or non-linear dimensionality reduction, automatic identification of cell subsets, and inference of the relatedness between cell subsets. This pipeline also provides a graphical user interface (GUI) for ease of use, as well as a shiny application (APP) for interactive visualization of cell subpopulations and progression profiles of key markers. Applied to a CD14-CD19- PBMCs dataset, cytofkit accurately identified different subsets of lymphocytes; applied to a human CD4+ T cell dataset, cytofkit uncovered multiple subtypes of TFH cells spanning blood and tonsils. Cytofkit is implemented in R, licensed under the Artistic license 2.0, and freely available from the Bioconductor website, https://bioconductor.org/packages/cytofkit/. Cytofkit is also applicable for flow cytometry data analysis.},
+	Author = {Chen, Hao and Lau, Mai Chan and Wong, Michael Thomas and Newell, Evan W and Poidinger, Michael and Chen, Jinmiao},
+	Date-Added = {2020-03-17 22:14:49 -0400},
+	Date-Modified = {2020-03-17 22:16:01 -0400},
+	Journal = {PLoS Comput Biol},
+	Month = {Sep},
+	Number = {9},
+	Pmc = {PMC5035035},
+	Pmid = {27662185},
+	Title = {Cytofkit: A Bioconductor Package for an Integrated Mass Cytometry Data Analysis Pipeline.},
+	Volume = {12},
+	Year = {2016},
+	Bdsk-Url-1 = {https://doi.org/10.1371/journal.pcbi.1005112}}
+
+@article{Lu-2015,
+	Abstract = {Community detection has become a fundamental operation in numerous graph-theoretic applications. It is used to reveal natural divisions that exist within real world networks without imposing prior size or cardinality constraints on the set of communities. Despite its potential for application, there is only limited support for community detection on large-scale parallel computers, largely owing to the irregular and inherently sequential nature of the underlying heuristics. In this paper, we present parallelization heuristics for fast community detection using the Louvain method as the serial template. The Louvain method is a multi-phase, iterative heuristic for modularity optimization. Originally developed by Blondel et al. (2008), the method has become increasingly popular owing to its ability to detect high modularity community partitions in a fast and memory-efficient manner. However, the method is also inherently sequential, thereby limiting its scalability. Here, we observe certain key properties of this method that present challenges for its parallelization, and consequently propose heuristics that are designed to break the sequential barrier. For evaluation purposes, we implemented our heuristics using OpenMP multithreading, and tested them over real world graphs derived from multiple application domains (e.g., internet, citation, biological). Compared to the serial Louvain implementation, our parallel implementation is able to produce community outputs with a higher modularity for most of the inputs tested, in comparable number or fewer iterations, while providing absolute speedups of up to 16× using 32 threads.},
+	Author = {Hao Lu and Mahantesh Halappanavar and Ananth Kalyanaraman},
+	Date-Added = {2020-03-10 14:38:04 -0400},
+	Date-Modified = {2020-03-10 14:38:10 -0400},
+	Doi = {https://doi.org/10.1016/j.parco.2015.03.003},
+	Issn = {0167-8191},
+	Journal = {Parallel Computing},
+	Keywords = {Community detection, Parallel graph heuristics, Graph coloring, Graph clustering},
+	Note = {Graph analysis for scientific discovery},
+	Pages = {19 - 37},
+	Title = {Parallel heuristics for scalable community detection},
+	Url = {http://www.sciencedirect.com/science/article/pii/S0167819115000472},
+	Volume = {47},
+	Year = {2015},
+	Bdsk-Url-1 = {http://www.sciencedirect.com/science/article/pii/S0167819115000472},
+	Bdsk-Url-2 = {https://doi.org/10.1016/j.parco.2015.03.003}}
+
+@article{Levine-2015,
+	Abstract = {Acute myeloid leukemia (AML) manifests as phenotypically and functionally diverse cells, often within the same patient. Intratumor phenotypic and functional heterogeneity have been linked primarily by physical sorting experiments, which assume that functionally distinct subpopulations can be prospectively isolated by surface phenotypes. This assumption has proven problematic, and we therefore developed a data-driven approach. Using mass cytometry, we profiled surface and intracellular signaling proteins simultaneously in millions of healthy and leukemic cells. We developed PhenoGraph, which algorithmically defines phenotypes in high-dimensional single-cell data. PhenoGraph revealed that the surface phenotypes of leukemic blasts do not necessarily reflect their intracellular state. Using hematopoietic progenitors, we defined a signaling-based measure of cellular phenotype, which led to isolation of a gene expression signature that was predictive of survival in independent cohorts. This study presents new methods for large-scale analysis of single-cell heterogeneity and demonstrates their utility, yielding insights into AML pathophysiology.},
+	Author = {Levine, Jacob H and Simonds, Erin F and Bendall, Sean C and Davis, Kara L and Amir, El-ad D and Tadmor, Michelle D and Litvin, Oren and Fienberg, Harris G and Jager, Astraea and Zunder, Eli R and Finck, Rachel and Gedman, Amanda L and Radtke, Ina and Downing, James R and Pe'er, Dana and Nolan, Garry P},
+	Date-Added = {2020-03-07 14:38:31 -0500},
+	Date-Modified = {2020-03-07 14:41:38 -0500},
+	Doi = {10.1016/j.cell.2015.05.047},
+	Journal = {Cell},
+	Keywords = {phenograph, cytof, aml},
+	Month = {Jul},
+	Number = {1},
+	Pages = {184--197},
+	Pmc = {PMC4508757},
+	Pmid = {26095251},
+	Title = {Data-Driven Phenotypic Dissection of AML Reveals Progenitor-like Cells that Correlate with Prognosis.},
+	Volume = {162},
+	Year = {2015},
+	Bdsk-Url-1 = {https://doi.org/10.1016/j.cell.2015.05.047}}
+
+@inproceedings{Boytsov-2013,
+	Author = {Leonid Boytsov and Bilegsaikhan Naidan},
+	Bibsource = {dblp computer science bibliography, https://dblp.org},
+	Biburl = {https://dblp.org/rec/conf/sisap/BoytsovN13.bib},
+	Booktitle = {Similarity Search and Applications - 6th International Conference, {SISAP} 2013, {A} Coru{\~{n}}a, Spain, October 2-4, 2013, Proceedings},
+	Date-Added = {2020-03-05 18:21:05 -0500},
+	Date-Modified = {2020-03-17 23:15:19 -0400},
+	Doi = {10.1007/978-3-642-41062-8_28},
+	Editor = {Nieves R. Brisaboa and Oscar Pedreira and Pavel Zezula},
+	Pages = {280--293},
+	Publisher = {Springer},
+	Series = {Lecture Notes in Computer Science},
+	Timestamp = {Tue, 14 May 2019 10:00:53 +0200},
+	Title = {Engineering Efficient and Effective Non-metric Space Library},
+	Url = {https://doi.org/10.1007/978-3-642-41062-8\_28},
+	Volume = {8199},
+	Year = {2013},
+	Bdsk-Url-1 = {https://doi.org/10.1007/978-3-642-41062-8_28}}
+
+@manual{Mouselimis-2018,
+	Author = {Lampros Mouselimis},
+	Date-Added = {2020-03-05 18:17:25 -0500},
+	Date-Modified = {2020-03-10 14:24:43 -0400},
+	Note = {R package version 1.0.3},
+	Title = {nmslibR: Non Metric Space (Approximate) Library},
+	Url = {https://CRAN.R-project.org/package=nmslibR},
+	Year = {2018},
+	Bdsk-Url-1 = {https://CRAN.R-project.org/package=nmslibR}}
+
+@article{Malkov-2016,
+	Archiveprefix = {arXiv},
+	Author = {Yury A. Malkov and D. A. Yashunin},
+	Bibsource = {dblp computer science bibliography, https://dblp.org},
+	Biburl = {https://dblp.org/rec/journals/corr/MalkovY16.bib},
+	Date-Added = {2020-03-05 17:55:39 -0500},
+	Date-Modified = {2020-03-05 17:56:11 -0500},
+	Eprint = {1603.09320},
+	Journal = {CoRR},
+	Timestamp = {Mon, 13 Aug 2018 16:46:53 +0200},
+	Title = {Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs},
+	Url = {http://arxiv.org/abs/1603.09320},
+	Volume = {abs/1603.09320},
+	Year = {2016},
+	Bdsk-Url-1 = {http://arxiv.org/abs/1603.09320}}

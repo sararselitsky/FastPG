@@ -1,0 +1,7 @@
+
+^Docker.*$
+^Trials.*$
+^\.gitignore$
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
