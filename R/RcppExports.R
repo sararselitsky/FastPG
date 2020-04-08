@@ -2,11 +2,16 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 dedup_links <- function(links) {
-    .Call(`_rgrappolo_dedup_links`, links)
+    .Call(`_FastPG_dedup_links`, links)
 }
 
+#' Parallel Jaccard similarity index
+#'
+#' @param mat A numeric matrix of values
+#' @return A numeric matrix of values
+#' @export
 rcpp_parallel_jce <- function(mat) {
-    .Call(`_rgrappolo_rcpp_parallel_jce`, mat)
+    .Call(`_FastPG_rcpp_parallel_jce`, mat)
 }
 
 #' Parallel Louvain clustering
@@ -18,6 +23,6 @@ rcpp_parallel_jce <- function(mat) {
 #'   cluster number that the i'th node in the links matrix has been assigned to.
 #' @export
 parallel_louvain <- function(links) {
-    .Call(`_rgrappolo_parallel_louvain`, links)
+    .Call(`_FastPG_parallel_louvain`, links)
 }
 
