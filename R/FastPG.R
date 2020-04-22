@@ -24,8 +24,7 @@ fastCluster <- function( data, k= 30, num_threads= 1 ) {
   ind <- res$knn_idx
   
   links <- FastPG::rcpp_parallel_jce(ind)
-  links <- links[ links[, 1] != 0 ]   
-  links <- matrix( links, ncol= 3 )
+  links <- dedup_links(links)
   
   FastPG::parallel_louvain( links ) 
 }

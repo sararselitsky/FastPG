@@ -18,7 +18,8 @@ Imports:
     nmslibR
 LinkingTo: 
     Rcpp,
-    RcppParallel
+    RcppParallel,
+    BH
 SystemRequirements: GNU make
 NeedsCompilation: yes
 Roxygen: list(markdown = TRUE)
