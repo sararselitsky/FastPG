@@ -28,13 +28,21 @@ BEGIN_RCPP
 END_RCPP
 }
 // parallel_louvain
-Rcpp::List parallel_louvain(NumericMatrix links);
-RcppExport SEXP _FastPG_parallel_louvain(SEXP linksSEXP) {
+Rcpp::List parallel_louvain(NumericMatrix links, int minGraphSize, double C_thresh, double threshold, int numColors, bool strongScaling, int coloring, int syncType, int basicOpt);
+RcppExport SEXP _FastPG_parallel_louvain(SEXP linksSEXP, SEXP minGraphSizeSEXP, SEXP C_threshSEXP, SEXP thresholdSEXP, SEXP numColorsSEXP, SEXP strongScalingSEXP, SEXP coloringSEXP, SEXP syncTypeSEXP, SEXP basicOptSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type links(linksSEXP);
-    rcpp_result_gen = Rcpp::wrap(parallel_louvain(links));
+    Rcpp::traits::input_parameter< int >::type minGraphSize(minGraphSizeSEXP);
+    Rcpp::traits::input_parameter< double >::type C_thresh(C_threshSEXP);
+    Rcpp::traits::input_parameter< double >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< int >::type numColors(numColorsSEXP);
+    Rcpp::traits::input_parameter< bool >::type strongScaling(strongScalingSEXP);
+    Rcpp::traits::input_parameter< int >::type coloring(coloringSEXP);
+    Rcpp::traits::input_parameter< int >::type syncType(syncTypeSEXP);
+    Rcpp::traits::input_parameter< int >::type basicOpt(basicOptSEXP);
+    rcpp_result_gen = Rcpp::wrap(parallel_louvain(links, minGraphSize, C_thresh, threshold, numColors, strongScaling, coloring, syncType, basicOpt));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -42,7 +50,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_FastPG_dedup_links", (DL_FUNC) &_FastPG_dedup_links, 1},
     {"_FastPG_rcpp_parallel_jce", (DL_FUNC) &_FastPG_rcpp_parallel_jce, 1},
-    {"_FastPG_parallel_louvain", (DL_FUNC) &_FastPG_parallel_louvain, 1},
+    {"_FastPG_parallel_louvain", (DL_FUNC) &_FastPG_parallel_louvain, 9},
     {NULL, NULL, 0}
 };
 

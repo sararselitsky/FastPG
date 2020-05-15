@@ -22,7 +22,7 @@ rcpp_parallel_jce <- function(mat) {
 #' * `communities` - A vector where the i'th value is the
 #'   cluster number that the i'th node in the links matrix has been assigned to.
 #' @export
-parallel_louvain <- function(links) {
-    .Call(`_FastPG_parallel_louvain`, links)
+parallel_louvain <- function(links, minGraphSize = 1000L, C_thresh = 0.000001, threshold = 0.000000001, numColors = 16L, strongScaling = FALSE, coloring = 1L, syncType = 0L, basicOpt = 1L) {
+    .Call(`_FastPG_parallel_louvain`, links, minGraphSize, C_thresh, threshold, numColors, strongScaling, coloring, syncType, basicOpt)
 }
 
