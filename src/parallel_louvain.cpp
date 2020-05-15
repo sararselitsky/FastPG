@@ -213,8 +213,18 @@ free(tmpEdgeList);
 free(added);
 }//End of parse_SNAP()
 
-double find_communities(graph * G, long* C_orig) {
+double find_communities(graph * G, 
+                        long* C_orig, 
+                        int minGraphSz ,
+                        double C_thresh ,
+                        double threshold ,
+                        int numColors ,
+                        bool strongScaling ,
+                        int coloring ,
+                        int syncType ,
+                        int basicOpt ){
   
+  long minGraphSize = (long) minGraphSz;
   int nT = 1; //Default is one thread
 #pragma omp parallel
 {
@@ -288,16 +298,6 @@ graph* G_orig = (graph *) malloc (sizeof(graph)); //The original version of the 
 duplicateGivenGraph(G, G_orig);
 
 //Call the clustering algorithm:
-//Call the clustering algorithm:
-bool strongScaling = false;
-int coloring = 1;
-int syncType = 0;
-int numColors = 16;
-double C_thresh = 0.01;
-long minGraphSize = 100000;
-double threshold = 0.000001;
-int basicOpt = 1;
-//if ( opts.strongScaling ) { //Strong scaling enabled
 if(strongScaling){
   //Retain the original copy of the graph:
   graph* G_original = (graph *) malloc (sizeof(graph)); //The original version of the graph
@@ -392,7 +392,15 @@ return final_modularity;
 //'   cluster number that the i'th node in the links matrix has been assigned to.
 //' @export
 // [[Rcpp::export]]
-Rcpp::List parallel_louvain(NumericMatrix links){
+Rcpp::List parallel_louvain(NumericMatrix links, 
+                            int minGraphSize = 1000,
+                            double C_thresh = 0.000001,
+                            double threshold = 0.000000001,
+                            int numColors = 16,
+                            bool strongScaling = false,
+                            int coloring = 1,
+                            int syncType = 0,
+                            int basicOpt = 1){
 
   double modularity = -1;
 
@@ -406,7 +414,16 @@ Rcpp::List parallel_louvain(NumericMatrix links){
   
   long *C_orig = (long *) malloc (G->numVertices * sizeof(long)); assert(C_orig != 0);
   
-  modularity = find_communities(G,C_orig);
+  modularity = find_communities(G,
+                                C_orig,
+                                minGraphSize,
+                                C_thresh,
+                                threshold,
+                                numColors,
+                                strongScaling,
+                                coloring,
+                                syncType,
+                                basicOpt);
   
   for(auto it = clusterLocalMap.begin();it != clusterLocalMap.end(); ++it){
     res[it->first-1]=(int)C_orig[it->second];
