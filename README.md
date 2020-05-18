@@ -123,8 +123,8 @@ ind <- res$knn_idx
 
 # Parallel Jaccard metric
 links <- FastPG::rcpp_parallel_jce(ind)
-links <- links[ links[, 1] != 0 ]
-links <- matrix( links, ncol= 3 )
+links <- FastPG::dedup_links(links)
+
 
 # Parallel Louvain clustering
 clusters <- FastPG::parallel_louvain( links )

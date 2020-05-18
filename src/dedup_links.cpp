@@ -46,6 +46,11 @@ public:
   }
 };
 
+//' Remove duplicate links
+//'
+//' @param links A numeric matrix of network edges
+//' @return The matrix of edges with duplicates removed
+//' @export
 // [[Rcpp::export]]
 NumericMatrix dedup_links(NumericMatrix links){
   std::unordered_set<Edge,edgeHashFn,edgeCompareFn> edgeSet;
