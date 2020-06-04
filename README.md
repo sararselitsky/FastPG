@@ -42,7 +42,7 @@ singularity shell -B $PWD --pwd $PWD -C fastpg-latest.simg
 R
 ```
 
-Note that you should consider this container version like an "application" and not an environment. You will likely have problems installing additional packages into it. To do that, see [Extending the Docker container](#extending-the-docker-container).
+Note that you should consider this container version like an "application" and not an environment. You may have problems installing additional packages into it. To do that, see [Extending the Docker container](#extending-the-docker-container).
 
 ### Building your own Docker container
 
@@ -59,7 +59,7 @@ You can just use this with Docker as above, but you can't just use a local Docke
 
 ### Extending the Docker container
 
-If you want to add additional things to the container, you must build your own. You can extend the existing container either by editing the provided  `Dockerfile` or by using the existing container as the `FROM` that your own Docker container is based on.
+If you want to add additional things to the container, you should build your own. You can extend the existing container either by editing the provided  `Dockerfile` or by using the existing container as the `FROM` that your own Docker container is based on.
 
 ## Clustering with FastPG
 
@@ -68,6 +68,9 @@ Clustering is as simple as:
 ```{r}
 clusters <- FastPG::fastCluster( data, k, num_threads )
 ```
+
+The `fastCluster()` function takes a number of additional tuning parameters, but
+those have reasonable defaults.
 
 ### The `data=` parameter
 
