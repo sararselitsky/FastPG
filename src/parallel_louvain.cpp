@@ -464,12 +464,12 @@ Rcpp::List parallel_louvain(NumericMatrix links,
                             double C_thresh = 0.000001,
                             double threshold = 0.000000001,
                             int numColors = 16,
-                            bool strongScaling = false,
                             int coloring = 1,
                             int syncType = 0,
                             int basicOpt = 1){
 
   double modularity = -1;
+  bool strongScaling = false;
 
   graph* G = (graph *) malloc (sizeof(graph));
   

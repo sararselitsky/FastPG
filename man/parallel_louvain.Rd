@@ -10,7 +10,6 @@ parallel_louvain(
   C_thresh = 1e-06,
   threshold = 1e-09,
   numColors = 16L,
-  strongScaling = FALSE,
   coloring = 1L,
   syncType = 0L,
   basicOpt = 1L
