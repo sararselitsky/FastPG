@@ -72,7 +72,7 @@ void computeCommunityComparisons(vector<long>& C1, long N1, vector<long>& C2, lo
 
 double computeGiniCoefficient(long *colorSize, int numColors);
 double computeMerkinMetric(long* C1, long N1, long* C2, long N2);
-double computeVanDongenMetric(long* C1, long N1, long* C2, long N2);
+// double computeVanDongenMetric(long* C1, long N1, long* C2, long N2);
 
 //Sorting functions:
 void merge(long* arr, long l, long m, long r);
@@ -83,7 +83,7 @@ void SortEdgesUndirected(long NV, long NE, edge *list1, edge *list2, long *ptrs)
 void SortNodeEdgesByIndex(long NV, edge *list1, edge *list2, long *ptrs);
 
 double* computeEdgeSimilarityMetrics(graph *G);
-graph* buildSparifiedGraph(graph *Gin, double alpha);
+// graph* buildSparifiedGraph(graph *Gin, double alpha);
 
 void buildOld2NewMap(long N, long *C, long *commIndex); //Build the reordering map
 

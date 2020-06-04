@@ -224,79 +224,79 @@ double* computeEdgeSimilarityMetrics(graph *G) {
 }
 
 //Build a sparsified graph and return it:
-graph* buildSparifiedGraph(graph *Gin, double alpha) {
-    printf("Within buildSparifiedGraph(alpha= %ld)\n", alpha);
-    assert (alpha <= 1.0);
-    double time1=0, time2=0, totalTime=0;
-    //Get the iterators for the graph:
-    long NVer     = Gin->numVertices;
-    long NEdge    = Gin->numEdges;       //Returns the correct number of edges (not twice)
-    long *verPtr  = Gin->edgeListPtrs;   //Vertex Pointer: pointers to endV
-    edge *verInd  = Gin->edgeList;       //Vertex Index: destination id of an edge (src -> dest)
-    printf("N= %ld  NE=%ld\n", NVer, NEdge);
-    
-    //Step 1: Sort the neighbors based on their indices:
-    time1 = omp_get_wtime();
-    SortNeighborListUsingInsertionAndMergeSort(Gin);
-    time2 = omp_get_wtime();
-    printf("Time to sort the neighbor lists: %9.6lf sec.\n", time2 - time1);
-    
-    //Step 2: Compute Similarities:
-    double * simWeights = computeEdgeSimilarityMetrics(Gin);
-    
-    //Step 3: Determine top edges for each vertex:
-    bool* isEdgePresent = (bool*) malloc (2*NEdge*sizeof(bool)); assert(isEdgePresent != 0);
-#pragma omp parallel for
-    for (long v = 0; v < NVer; v++) {
-        long adj1 = verPtr[v];
-        long adj2 = verPtr[v+1];
-        if(adj2 == adj1)
-            continue; //isolated vertex; do nothing
-        long numTopEdges = round(pow((adj2-adj1), alpha)); //Number of top edges
-        if(numTopEdges <1)
-            numTopEdges = 1; //Add at least one edge (otherwise vertices can become isolated)
-        //Add the first neighbor by default
-        double minWeight     = simWeights[adj1]; //Similarity value of the first neighbor
-        long   minNeighbor   = adj1;           //Position of the first neighbor
-        isEdgePresent[adj1]  = true;           //Mark this edge as true
-        long edgesAddedSoFar = 1;            //Added one edge so far
-        //Process all the neighbors of v:
-        for(long i = adj1+1; i < adj2; i++ ) {
-            //Always maintain the least weighted neighbor for each vertex;
-            //... this neigbor will get bounced if there is no space
-            if(edgesAddedSoFar < numTopEdges) {
-                //Add the current edge to the list of top-k edges:
-                isEdgePresent[i] = true;   //Mark this edge as true
-                edgesAddedSoFar++;
-                //Check if this is the current smallest edge:
-                if(simWeights[i] < minWeight) {
-                    minWeight = simWeights[i];
-                    minNeighbor = i; //This is the position of the smallest edge added so far
-                }
-            } else {
-                //Replace an existing edge and find the next minimum edge:
-                if(simWeights[i] > minWeight) { //Found a heavier neighbor
-                    isEdgePresent[i] = true;   //Mark this edge as true
-                    isEdgePresent[minNeighbor] = false;   //Mark this edge as false
-                    //Set the new edge as the minimum; need to fix this next:
-                    minWeight = simWeights[i];
-                    minNeighbor = i; //This is the position of the smallest edge added so far
-                    //Now find the next minimum to replace:
-                    for(long k = adj1; k < i; k++ ) { //Only look within unprocessed list
-                        if((isEdgePresent[k]) && (simWeights[k] < minWeight)) {
-                            minWeight = simWeights[k];
-                            minNeighbor = k; //This is the position of the smallest edge added so far
-                        }
-                    }//End of for(k)
-                }//End of if(simWeights[i] > minWeight)
-            }//End of else
-        }//End of for(i)
-    }//End of for(v)
-    
-    //Step 4: Build the new graph:
-    //From each edge count the number of active edges and add them to the data structure
-    //Tricky because of the double storage requirements.
-    
-    
-}
+// graph* buildSparifiedGraph(graph *Gin, double alpha) {
+//     printf("Within buildSparifiedGraph(alpha= %ld)\n", alpha);
+//     assert (alpha <= 1.0);
+//     double time1=0, time2=0, totalTime=0;
+//     //Get the iterators for the graph:
+//     long NVer     = Gin->numVertices;
+//     long NEdge    = Gin->numEdges;       //Returns the correct number of edges (not twice)
+//     long *verPtr  = Gin->edgeListPtrs;   //Vertex Pointer: pointers to endV
+//     edge *verInd  = Gin->edgeList;       //Vertex Index: destination id of an edge (src -> dest)
+//     printf("N= %ld  NE=%ld\n", NVer, NEdge);
+//     
+//     //Step 1: Sort the neighbors based on their indices:
+//     time1 = omp_get_wtime();
+//     SortNeighborListUsingInsertionAndMergeSort(Gin);
+//     time2 = omp_get_wtime();
+//     printf("Time to sort the neighbor lists: %9.6lf sec.\n", time2 - time1);
+//     
+//     //Step 2: Compute Similarities:
+//     double * simWeights = computeEdgeSimilarityMetrics(Gin);
+//     
+//     //Step 3: Determine top edges for each vertex:
+//     bool* isEdgePresent = (bool*) malloc (2*NEdge*sizeof(bool)); assert(isEdgePresent != 0);
+// #pragma omp parallel for
+//     for (long v = 0; v < NVer; v++) {
+//         long adj1 = verPtr[v];
+//         long adj2 = verPtr[v+1];
+//         if(adj2 == adj1)
+//             continue; //isolated vertex; do nothing
+//         long numTopEdges = round(pow((adj2-adj1), alpha)); //Number of top edges
+//         if(numTopEdges <1)
+//             numTopEdges = 1; //Add at least one edge (otherwise vertices can become isolated)
+//         //Add the first neighbor by default
+//         double minWeight     = simWeights[adj1]; //Similarity value of the first neighbor
+//         long   minNeighbor   = adj1;           //Position of the first neighbor
+//         isEdgePresent[adj1]  = true;           //Mark this edge as true
+//         long edgesAddedSoFar = 1;            //Added one edge so far
+//         //Process all the neighbors of v:
+//         for(long i = adj1+1; i < adj2; i++ ) {
+//             //Always maintain the least weighted neighbor for each vertex;
+//             //... this neigbor will get bounced if there is no space
+//             if(edgesAddedSoFar < numTopEdges) {
+//                 //Add the current edge to the list of top-k edges:
+//                 isEdgePresent[i] = true;   //Mark this edge as true
+//                 edgesAddedSoFar++;
+//                 //Check if this is the current smallest edge:
+//                 if(simWeights[i] < minWeight) {
+//                     minWeight = simWeights[i];
+//                     minNeighbor = i; //This is the position of the smallest edge added so far
+//                 }
+//             } else {
+//                 //Replace an existing edge and find the next minimum edge:
+//                 if(simWeights[i] > minWeight) { //Found a heavier neighbor
+//                     isEdgePresent[i] = true;   //Mark this edge as true
+//                     isEdgePresent[minNeighbor] = false;   //Mark this edge as false
+//                     //Set the new edge as the minimum; need to fix this next:
+//                     minWeight = simWeights[i];
+//                     minNeighbor = i; //This is the position of the smallest edge added so far
+//                     //Now find the next minimum to replace:
+//                     for(long k = adj1; k < i; k++ ) { //Only look within unprocessed list
+//                         if((isEdgePresent[k]) && (simWeights[k] < minWeight)) {
+//                             minWeight = simWeights[k];
+//                             minNeighbor = k; //This is the position of the smallest edge added so far
+//                         }
+//                     }//End of for(k)
+//                 }//End of if(simWeights[i] > minWeight)
+//             }//End of else
+//         }//End of for(i)
+//     }//End of for(v)
+//     
+//     //Step 4: Build the new graph:
+//     //From each edge count the number of active edges and add them to the data structure
+//     //Tricky because of the double storage requirements.
+//     
+//     
+// }
 
