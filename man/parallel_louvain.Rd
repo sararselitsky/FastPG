@@ -4,19 +4,107 @@
 \alias{parallel_louvain}
 \title{Parallel Louvain clustering}
 \usage{
-parallel_louvain(links)
+parallel_louvain(
+  links,
+  minGraphSize = 1000L,
+  C_thresh = 1e-06,
+  threshold = 1e-09,
+  numColors = 16L,
+  strongScaling = FALSE,
+  coloring = 1L,
+  syncType = 0L,
+  basicOpt = 1L
+)
 }
 \arguments{
-\item{links}{A numeric matrix of network edges}
+\item{links}{A numeric matrix of network edges.}
+
+\item{minGraphSize}{(1,000) Determines when multi-phase operations should
+stop. Execution stops when agglomeration has reduced the current graph
+to a fewer than \code{minGraphSize} vertices.}
+
+\item{C_thresh}{(1e-6) A numeric value > 0 and < 1. When coloring is
+enabled, the algorithm will stop iterating when the gain in modularity
+is less than \code{C_thresh}. A final iteration is then performed using the
+\code{threshold} parameter. Should be larger than \code{threshold} for gains in
+performance.}
+
+\item{threshold}{(1e-9) The algorithm will stop the iterations in the
+current phase when the gain in modularity is less than \code{threshold}. The
+algorithm can enter the next phase based on the number of vertices in
+the reduced graph.}
+
+\item{numColors}{(16) An integer between 1 and 1024. Limits graph
+coloring. Only used if \code{coloring=3}, incomplete coloring, is set.}
+
+\item{coloring}{(1) An integer between 0 and 3 that controls the
+distance-1 graph coloring heuristic used to partition vertices for
+parallel processing.
+\itemize{
+\item 0 - No coloring.
+\item 1 - (Default) Distance-1 graph coloring. Every vertex receives a color
+such that no two neighbors have the same color.
+\item 2 - As 1, rebalanced so there are a similar number of vertices labeled
+with each color.
+\item 3 - Incomplete coloring, limited to \code{numColors}, by default 16.
+}}
+
+\item{syncType}{(0) An integer between 0 and 4 that controls
+synchronization between threads. Only applies if \code{coloring=0} (no
+coloring). Synchronization forces the Grappolo algorithm to execute in a
+way more like a serial Louvain implementation.
+\itemize{
+\item 0 - (Default) No sync. Best run-time performance.
+\item 1 - Full sync. Behaves like serial Louvain.
+\item 2 - Neighborhood sync. A hybrid between 0 (full sync) and 1 (no sync).
+\item 3 - Early termination. Stops modifying a vertex if its assigned
+community has not changed for a few iterations. (improves run-time).
+\item 4 - Full sync with early termination. A hybrid of 1 and 3.
+}}
+
+\item{basicOpt}{(1) Either 0 or 1, controls the representation of
+intermediate data structures.
+\itemize{
+\item 0 - Use a map/hash based structure. Uses less memory but may be slowed
+when many memory allocations and deallocations occur during processing.
+Better for data with larger numbers of communities or weak community
+structure.
+\item 1 - (Default) Use a vector/indexed structure. Uses more memory but may
+be slowed when there are large numbers of communities or when the
+algorithm converges only slowly. Better for data with fewer communities
+or with tight community clusters.
+}}
 }
 \value{
-A list with two elements
+A list with two elements:
 \itemize{
-\item \code{modularity} -
-\item \code{communities} - A vector where the i'th value is the
-cluster number that the i'th node in the links matrix has been assigned to.
+\item \code{modularity} - A measure of the connectedness of a clustered network.
+When comparing different clusterings of the same network, the one with the
+higher modularity is "better".
+\item \code{communities} - A vector where the i'th value is the cluster number that
+the i'th node in the links matrix has been assigned to.
 }
 }
 \description{
-Parallel Louvain clustering
+This function implements Grappolo, a parallel version of the Louvain
+community detection algorithm. The only required parameter is \code{links}. All
+other parameters are tuning parameters that control how speed vs accuracy
+vs memory trade offs are made.
+}
+\details{
+The Louvain algorithm identifies clusters of vertices in a graph by
+sequentially collapsing it in an agglomerative way, converting tight
+clusters of vertices in one round of processing into a single vertex in
+the next. This is guided by comparing how connectedness (modularity)
+improves when assigning vertices to one cluster vs another. Grappolo
+applies several heuristics to allow parallelization of this process across
+multiple cpus.
+
+The Louvain algorithm is non-deterministic and performance for a serial
+implementation will vary considerably for different input graphs. The
+grappolo algorithm inherits these limitations with added complications
+from parallelization. However, the parallel Grappolo algorithm generally
+results in large speed gains with minimal impacts on the modularity score
+of the identified clusters, and in practice allows for the analysis of
+larger networks than a serial Louvain implementation.
 }

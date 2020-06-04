@@ -385,11 +385,78 @@ return final_modularity;
 
 //' Parallel Louvain clustering
 //'
-//' @param links A numeric matrix of network edges
-//' @return A list with two elements
-//' * `modularity` - 
-//' * `communities` - A vector where the i'th value is the
-//'   cluster number that the i'th node in the links matrix has been assigned to.
+//' This function implements Grappolo, a parallel version of the Louvain
+//' community detection algorithm. The only required parameter is `links`. All
+//' other parameters are tuning parameters that control how speed vs accuracy
+//' vs memory trade offs are made.
+//'
+//' The Louvain algorithm identifies clusters of vertices in a graph by
+//' sequentially collapsing it in an agglomerative way, converting tight
+//' clusters of vertices in one round of processing into a single vertex in
+//' the next. This is guided by comparing how connectedness (modularity)
+//' improves when assigning vertices to one cluster vs another. Grappolo
+//' applies several heuristics to allow parallelization of this process across
+//' multiple cpus.
+//'
+//' The Louvain algorithm is non-deterministic and performance for a serial
+//' implementation will vary considerably for different input graphs. The
+//' grappolo algorithm inherits these limitations with added complications
+//' from parallelization. However, the parallel Grappolo algorithm generally
+//' results in large speed gains with minimal impacts on the modularity score
+//' of the identified clusters, and in practice allows for the analysis of
+//' larger networks than a serial Louvain implementation.
+//'
+//' @param links A numeric matrix of network edges.
+//' @param coloring (1) An integer between 0 and 3 that controls the
+//'   distance-1 graph coloring heuristic used to partition vertices for
+//'   parallel processing.
+//'   * 0 - No coloring.
+//'   * 1 - (Default) Distance-1 graph coloring. Every vertex receives a color
+//'   such that no two neighbors have the same color.
+//'   * 2 - As 1, rebalanced so there are a similar number of vertices labeled
+//'   with each color.
+//'   * 3 - Incomplete coloring, limited to `numColors`, by default 16.
+//' @param numColors (16) An integer between 1 and 1024. Limits graph
+//'   coloring. Only used if `coloring=3`, incomplete coloring, is set.
+//' @param C_thresh (1e-6) A numeric value > 0 and < 1. When coloring is
+//'   enabled, the algorithm will stop iterating when the gain in modularity
+//'   is less than `C_thresh`. A final iteration is then performed using the
+//'   `threshold` parameter. Should be larger than `threshold` for gains in
+//'   performance.
+//' @param minGraphSize (1,000) Determines when multi-phase operations should
+//'   stop. Execution stops when agglomeration has reduced the current graph
+//'   to a fewer than `minGraphSize` vertices.
+//' @param threshold (1e-9) The algorithm will stop the iterations in the
+//'   current phase when the gain in modularity is less than `threshold`. The
+//'   algorithm can enter the next phase based on the number of vertices in
+//'   the reduced graph.
+//' @param syncType (0) An integer between 0 and 4 that controls
+//'   synchronization between threads. Only applies if `coloring=0` (no
+//'   coloring). Synchronization forces the Grappolo algorithm to execute in a
+//'   way more like a serial Louvain implementation.
+//'   * 0 - (Default) No sync. Best run-time performance.
+//'   * 1 - Full sync. Behaves like serial Louvain.
+//'   * 2 - Neighborhood sync. A hybrid between 0 (full sync) and 1 (no sync).
+//'   * 3 - Early termination. Stops modifying a vertex if its assigned
+//'   community has not changed for a few iterations. (improves run-time).
+//'   * 4 - Full sync with early termination. A hybrid of 1 and 3.
+//' @param basicOpt (1) Either 0 or 1, controls the representation of
+//'   intermediate data structures.
+//'   * 0 - Use a map/hash based structure. Uses less memory but may be slowed
+//'   when many memory allocations and deallocations occur during processing.
+//'   Better for data with larger numbers of communities or weak community
+//'   structure.
+//'   * 1 - (Default) Use a vector/indexed structure. Uses more memory but may
+//'   be slowed when there are large numbers of communities or when the
+//'   algorithm converges only slowly. Better for data with fewer communities
+//'   or with tight community clusters.
+//' 
+//' @return A list with two elements:
+//' * `modularity` - A measure of the connectedness of a clustered network.
+//' When comparing different clusterings of the same network, the one with the
+//' higher modularity is "better".
+//' * `communities` - A vector where the i'th value is the cluster number that
+//' the i'th node in the links matrix has been assigned to.
 //' @export
 // [[Rcpp::export]]
 Rcpp::List parallel_louvain(NumericMatrix links, 
