@@ -2,9 +2,16 @@ FROM jefferys/bioconductor:3.10_latest
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
+      build-essential \
+      libtool \
+      m4 \
+      automake \
+      autoconf \
+      git \
+      bison \
+      flex \
       python3 \
       python3-dev \
-      python3-igraph \
       python3-numpy \
       python3-pip \
       python3-psutil \
@@ -13,7 +20,8 @@ RUN apt-get update \
       python3-wheel
 
 RUN pip3 install \
-            leidenalg
+      python-igraph \
+      leidenalg
 
 RUN pip3 install nmslib==2.0.5
 

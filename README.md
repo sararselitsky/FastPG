@@ -36,10 +36,13 @@ A simpler way is to use a Docker container, `jefferys/fastpg:latest`, that is al
 docker pull jefferys/fastpg:latest
 docker run -it --rm -v $PWD:$PWD -w $PWD jefferys/fastpg:latest
 R
-   # or
+   # or (singularity < 3.0)
 singularity pull docker://jefferys/fastpg:latest
 singularity shell -B $PWD --pwd $PWD -C fastpg-latest.simg
 R
+   # or (singularity 3.0+)
+singularity pull docker://jefferys/fastpg:latest
+singularity shell -B $PWD --pwd $PWD -C fastpg_latest.sif
 ```
 
 Note that you should consider this container version like an "application" and not an environment. You may have problems installing additional packages into it. To do that, see [Extending the Docker container](#extending-the-docker-container).
@@ -80,7 +83,7 @@ The main input is the numeric data to cluster as a matrix, where rows are elemen
 url <- "https://github.com/lmweber/benchmark-data-Levine-32-dim/raw/master/data/Levine_32dim.fcs"
 file <- "Levine_32dim.fcs"
 download.file( url, file, mode="wb") # This downloads a 41.5 MB binary file
-dataColumns <- c( 5:36 ) # extract only the data columns, whatever they are
+dataColumns <- c( 5:36 ) # extract only the data columns
 data <-  flowCore::exprs( flowCore::read.FCS( file ))[ , dataColumns ]
 ```
 

@@ -10,7 +10,7 @@ fastCluster(
   num_threads = 1,
   coloring = 1,
   minGraphSize = 1000,
-  Colors = 16,
+  numColors = 16,
   C_thresh = 1e-06,
   threshold = 1e-09,
   syncType = 0,
@@ -29,12 +29,12 @@ creating the community graph.}
 \item{coloring}{(1) Integer tuning flag between 0 and 3 that controls the
 type of distance-1 graph coloring. 0 = no coloring; 1 (default) =
 distance-1 graph coloring; 2= 1 with rebalancing; 3= Incomplete coloring
-with \code{Colors} colors.}
+with \code{numColors} colors.}
 
 \item{minGraphSize}{(1,000) Integer tuning parameter. Change processing
 when graph size has reduced enough.}
 
-\item{Colors}{(16) Integer tuning parameter between 1 and 1024. Limits
+\item{numColors}{(16) Integer tuning parameter between 1 and 1024. Limits
 graph coloring. Only used if \code{coloring=3} is set.}
 
 \item{C_thresh}{(1e-6) Numeric tuning parameter > 0 and < 1. Change

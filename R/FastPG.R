@@ -28,10 +28,10 @@
 #' @param coloring (1) Integer tuning flag between 0 and 3 that controls the
 #'   type of distance-1 graph coloring. 0 = no coloring; 1 (default) =
 #'   distance-1 graph coloring; 2= 1 with rebalancing; 3= Incomplete coloring
-#'   with `Colors` colors.
+#'   with `numColors` colors.
 #' @param minGraphSize (1,000) Integer tuning parameter. Change processing
 #'   when graph size has reduced enough.
-#' @param Colors (16) Integer tuning parameter between 1 and 1024. Limits
+#' @param numColors (16) Integer tuning parameter between 1 and 1024. Limits
 #'   graph coloring. Only used if `coloring=3` is set.
 #' @param C_thresh (1e-6) Numeric tuning parameter > 0 and < 1. Change
 #'   processing when modularity gain is too small. Not used if coloring is
@@ -81,7 +81,7 @@
 #' @export
 fastCluster <- function(
   data, k= 30, num_threads= 1,
-  coloring= 1, minGraphSize= 1000, Colors= 16, C_thresh= 1e-6,
+  coloring= 1, minGraphSize= 1000, numColors= 16, C_thresh= 1e-6,
   threshold= 1e-9, syncType= 0, basicOpt= 1
 ) {
   init_nms <- nmslibR::NMSlib$new( input_data= data, space= 'l2', method= 'hnsw' )
@@ -92,7 +92,7 @@ fastCluster <- function(
   links <- dedup_links(links)
   
   FastPG::parallel_louvain(
-    links, coloring= coloring, minGraphSize= minGraphSize, Colors= Colors,
+    links, coloring= coloring, minGraphSize= minGraphSize, numColors= numColors,
     C_thresh= C_thresh, threshold= threshold, syncType= syncType,
     basicOpt= basicOpt
   )
