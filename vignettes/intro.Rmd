@@ -19,6 +19,10 @@ knitr::opts_chunk$set(
 
 Fast phenograph-like clustering of millions of items with scores of features.
 
+See our preprint article introducing FastPG:
+
+Thomas Bodenheimer, Mahantesh Halappanavar, Stuart Jefferys, Ryan Gibson, Siyao Liu, Peter J Mucha, Natalie Stanley, Joel S Parker, Sara R Selitsky. FastPG: Fast clustering of millions of single cells. bioRxiv 2020.06.19.159749; doi: https://doi.org/10.1101/2020.06.19.159749
+
 ## License
 
 This package is licensed under the MIT license, except for the Grappolo C++ library by Mahantesh Halappanavar (hala@pnnl.gov) which is included and licensed under the BSD-3 license as described in the headings of the relevant *.cpp files. Some alterations to the original Grappolo source have been made to support installation and use within an R package. The original Grappolo C++ library is available at https://hpc.pnl.gov/people/hala/grappolo.html
