@@ -84,9 +84,10 @@ fastCluster <- function(
   coloring= 1, minGraphSize= 1000, numColors= 16, C_thresh= 1e-6,
   threshold= 1e-9, syncType= 0, basicOpt= 1
 ) {
-  init_nms <- nmslibR::NMSlib$new( input_data= data, space= 'l2', method= 'hnsw' )
-  res <- init_nms$knn_Query_Batch( data, k= k, num_threads= num_threads )
-  ind <- res$knn_idx
+  #init_nms <- nmslibR::NMSlib$new( input_data= data, space= 'l2', method= 'hnsw' )
+  #res <- init_nms$knn_Query_Batch( data, k= k, num_threads= num_threads )
+  all_knn <- RcppHNSW::hnsw_knn(data,k,distance='l2')
+  ind <- all_knn$idx
   
   links <- FastPG::rcpp_parallel_jce(ind)
   links <- dedup_links(links)
