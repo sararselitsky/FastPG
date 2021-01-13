@@ -12,17 +12,7 @@ This package is licensed under the MIT license, except for the Grappolo C++ libr
 
 ## Installation
 
-This R package has dependencies outside of R, e.g. on a python package that wraps a library, `nmslib` [@Boytsov-2013]. You can either set up the dependencies and install locally, pull down a pre-built [Docker](https://www.docker.com) container, or build the Docker container yourself locally.
-
 ### Local install
-
-This R package depends on `nmslibR`[@Mouselimis-2018], which in turn depends on the python module `nmslib`. The instructions to install `nmslib` and its prerequisites are described in the `nmslibR` package [README](https://cran.r-project.org/web/packages/nmslibR/readme/README.html). Note that this setup is somewhat involved, especially if you are not familiar with setting up python modules.
-
-Using python from R requires R to know where to find the python you want to run. In order to avoid specifying the python version every new session (as described in the `nmslibR` document linked above), you can set a shell startup environmental variable `RETICULATE_PYTHON` to the path to python, e.g.:
-
-```{bash}
-export ENV RETICULATE_PYTHON=/usr/bin/python3
-```
 
 Once you have set up the dependencies, you can just install the `FastPG` package from
 GitHub in one of the normal ways. My favorite is:
@@ -119,7 +109,7 @@ Caution: -1 indicates a point that was not clustered; each can be considered the
 
 FastPG utilizes the same three main steps as the phenograph algorithm [@Levine-2015, @Chen-2016], but uses fast, parallel implementations.
 
-* The k nearest neighbors determining step is implemented using hierarchical navigable small world graphs [@Malkov-2016] via the R library nmslibR [@Mouselimis-2018].
+* The k nearest neighbors determining step is implemented using hierarchical navigable small world graphs [@Malkov-2016] via the RcppHNSW library.
 * The nearest-neighbor distances are generated using an included parallel Jaccard metric function.
 * Clustering is implemented as community detection in the graph formed from the overlapping "k best friends" for each element. This is done using a parallel Louvain algorithm as implemented by Grappolo [@Lu-2015]. Code for Grappolo has been included within this package; the standalone application with additional functionality is available for download as described in the license section above.
   
@@ -127,9 +117,10 @@ Calling `fastCluster()`  is equivalent to and is essentially implemented as the 
 
 ```{r}
 # Approximate k nearest neighbours
-init_nms <- nmslibR::NMSlib$new( input_data= data, space= 'l2', method= 'hnsw' )
-res <- init_nms$knn_Query_Batch( data, k= k, num_threads= num_threads )
-ind <- res$knn_idx
+all_knn <- RcppHNSW::hnsw_knn(data,k=30,distance='l2',M = 16, ef_construction = 200, ef = 10,
+                              verbose = FALSE, progress = "bar", n_threads = num_threads,
+                              grain_size = 1)
+ind <- all_knn$idx
 
 # Parallel Jaccard metric
 links <- FastPG::rcpp_parallel_jce(ind)

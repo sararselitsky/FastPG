@@ -110,7 +110,6 @@ clusters <- FastPG::fastCluster( data, k, num_threads )
 \seealso{
 \itemize{
 \item \code{\link{parallel_louvain}} (Grappolo)
-\item \href{../../nmslibR/doc/the_nmslibR_package.html}{\code{vignette("the_nmslibR_package.html", package = "nmslibR")}}, (HNSW)
 \item \href{../doc/intro.html}{\code{vignette("intro.html", package= "FastPG")}} (FastPG vignette)
 }
 }

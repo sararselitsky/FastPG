@@ -24,7 +24,6 @@
 #' @param k (3) How many nearest neighbors to choose for each point when
 #'   creating the community graph.
 #' @param num_threads (1) Number of threads to use.
-#' 
 #' @param coloring (1) Integer tuning flag between 0 and 3 that controls the
 #'   type of distance-1 graph coloring. 0 = no coloring; 1 (default) =
 #'   distance-1 graph coloring; 2= 1 with rebalancing; 3= Incomplete coloring
@@ -80,13 +79,14 @@
 #'   
 #' @export
 fastCluster <- function(
-  data, k= 30, num_threads= 1,
+  data, k= 30, num_threads = 1,
   coloring= 1, minGraphSize= 1000, numColors= 16, C_thresh= 1e-6,
   threshold= 1e-9, syncType= 0, basicOpt= 1
 ) {
-  init_nms <- nmslibR::NMSlib$new( input_data= data, space= 'l2', method= 'hnsw' )
-  res <- init_nms$knn_Query_Batch( data, k= k, num_threads= num_threads )
-  ind <- res$knn_idx
+  all_knn <- RcppHNSW::hnsw_knn(data,k=30,distance='l2',M = 16, ef_construction = 200, ef = 10,
+                              verbose = FALSE, progress = "bar", n_threads = num_threads,
+                              grain_size = 1)
+  ind <- all_knn$idx
   
   links <- FastPG::rcpp_parallel_jce(ind)
   links <- dedup_links(links)

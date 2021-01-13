@@ -15,7 +15,7 @@ Imports:
     RcppParallel (>= 4.4.4),
     flowCore,
     checkmate,
-    nmslibR
+    RcppHNSW
 LinkingTo: 
     Rcpp,
     RcppParallel,
