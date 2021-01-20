@@ -8,26 +8,26 @@ RUN apt-get update \
       automake \
       autoconf \
       git \
-      bison \
-      flex \
-      python3 \
-      python3-dev \
-      python3-numpy \
-      python3-pip \
-      python3-psutil \
-      python3-pybind11 \
-      python3-setuptools \
-      python3-wheel
+#      bison \
+#      flex \
+#      python3 \
+#      python3-dev \
+#      python3-numpy \
+#      python3-pip \
+#      python3-psutil \
+#      python3-pybind11 \
+#      python3-setuptools \
+#      python3-wheel
 
-RUN pip3 install \
-      python-igraph \
-      leidenalg
+# RUN pip3 install \
+#      python-igraph \
+#      leidenalg
 
-RUN pip3 install nmslib==2.0.5
+# RUN pip3 install nmslib==2.0.5
 
 RUN R -e 'BiocManager::install( \
     c( "flowCore", "data.table", "RANN", "Rcpp", "RcppParallel", \
-       "igraph", "nmslibR", "mclust", "MLmetrics", "remotes" ), \
+       "igraph", "RcppHNSW", "mclust", "MLmetrics", "remotes" ), \
     update= FALSE, \
     ask= FALSE, \
     version= "3.10" \
@@ -47,7 +47,7 @@ RUN R -e 'BiocManager::install( \
 #    rm -r /usr/local/grappolo-latest
 
 RUN R -e 'BiocManager::install( \
-    c( "sararselitsky/FastPG" ), \
+    c( "sararselitsky/FastPG@dev" ), \
     update= FALSE, \
     ask= FALSE, \
     version= "3.10" \
@@ -82,9 +82,9 @@ LABEL software="${tool}"
 LABEL about.summary="${brief}"
 LABEL about.home="${toolSource}"
 LABEL about.license="${toolLicense}"
-LABEL about.tags="debian, bioconductor, fastpg, nlmlib"
+LABEL about.tags="debian, bioconductor, fastpg"
 LABEL maintainer="Stuart R. Jefferys <srj@unc.edu>"
 
-ENV RETICULATE_PYTHON=/usr/bin/python3
+# ENV RETICULATE_PYTHON=/usr/bin/python3
 
 CMD ["bash"]
