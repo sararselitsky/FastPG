@@ -47,10 +47,13 @@ A simpler way is to use a Docker container, `jefferys/fastpg:latest`, that is al
 docker pull jefferys/fastpg:latest
 docker run -it --rm -v $PWD:$PWD -w $PWD jefferys/fastpg:latest
 R
-   # or
+    # or (singularity < 3.0)
 singularity pull docker://jefferys/fastpg:latest
 singularity shell -B $PWD --pwd $PWD -C fastpg-latest.simg
 R
+   # or (singularity 3.0+)
+singularity pull docker://jefferys/fastpg:latest
+singularity shell -B $PWD --pwd $PWD -C fastpg_latest.sif
 ```
 
 Note that you should consider this container version like an "application" and not an environment. You may have problems installing additional packages into it. To do that, see [Extending the Docker container](#extending-the-docker-container).
@@ -79,6 +82,9 @@ Clustering is as simple as:
 ```{r}
 clusters <- FastPG::fastCluster( data, k, num_threads )
 ```
+
+The `fastCluster()` function takes a number of additional tuning parameters, but
+those have reasonable defaults.
 
 ### The `data=` parameter
 
@@ -120,7 +126,7 @@ Caution: -1 indicates a point that was not clustered; each can be considered the
 
 FastPG utilizes the same three main steps as the phenograph algorithm [@Levine-2015, @Chen-2016], but uses fast, parallel implementations.
 
-* The k nearest neighbors determining step is implemented using hierarchical navigable small world graphs [@Malkov-2016] via the RcppHNSW.
+* The k nearest neighbors determining step is implemented using hierarchical navigable small world graphs [@Malkov-2016] via the  [RcppHNSW](https://cran.rstudio.com/web/packages/RcppHNSW) library.
 * The nearest-neighbor distances are generated using an included parallel Jaccard metric function.
 * Clustering is implemented as community detection in the graph formed from the overlapping "k best friends" for each element. This is done using a parallel Louvain algorithm as implemented by Grappolo [@Lu-2015]. Code for Grappolo has been included within this package; the standalone application with additional functionality is available for download as described in the license section above.
   
@@ -128,18 +134,19 @@ Calling `fastCluster()`  is equivalent to and is essentially implemented as the 
 
 ```{r}
 # Approximate k nearest neighbours
-all_knn <- RcppHNSW::hnsw_knn(data,k=30,distance='l2',M = 16, ef_construction = 200, ef = 10,
-                              verbose = FALSE, progress = "bar", n_threads = num_threads,
-                              grain_size = 1)
+all_knn <- RcppHNSW::hnsw_knn( data, k= k, distance= 'l2',
+                               n_threads= num_threads )
+
 ind <- all_knn$idx
 
 # Parallel Jaccard metric
 links <- FastPG::rcpp_parallel_jce(ind)
-links <- links[ links[, 1] != 0 ]
-links <- matrix( links, ncol= 3 )
+links <- FastPG::dedup_links(links)
 
 # Parallel Louvain clustering
 clusters <- FastPG::parallel_louvain( links )
 ```
+
+Note that RcppHNSW::hnsw_knn() and FastPG::parallel_louvain( links ) have numerous additional parameters; only the parameters used that are different from the defaults are shown above. The FastPG::fastCluster() wrapper allows setting all applicable parameters. See the function documentation for additional details.
 
 ## References

@@ -8,6 +8,13 @@ fastCluster(
   data,
   k = 30,
   num_threads = 1,
+  distance = "l2",
+  M = 16,
+  ef_construction = 200,
+  ef = k,
+  verbose = FALSE,
+  progress = "bar",
+  grain_size = 1,
   coloring = 1,
   minGraphSize = 1000,
   numColors = 16,
@@ -21,10 +28,41 @@ fastCluster(
 \item{data}{A numeric matrix of rows to cluster based on the similarity of
 its column features.}
 
-\item{k}{(3) How many nearest neighbors to choose for each point when
+\item{k}{(30) How many nearest neighbors to choose for each point when
 creating the community graph.}
 
 \item{num_threads}{(1) Number of threads to use.}
+
+\item{distance}{('l2') The type of knn distance to calculate. One of
+\itemize{
+\item 'l2' - Squared Euclidean
+\item 'euclidian' - Euclidean
+\item 'cosine' - Cosine
+\item 'ip' - Inner product (un-normalized cosine). May give negative distances.
+}}
+
+\item{M}{(16) Number of bi-directional links to create during knn index
+construction. Must be >= 2. Often 12-48 works well, usually 2-100.}
+
+\item{ef_construction}{(200). Size of the dynamic list used during knn
+index construction. Smaller saves time. Larger improves quality. Coerced
+to be less than or equal to the data size and at least as large as k.}
+
+\item{ef}{(same as k) Size of the dynamic list used during knn searching.
+Smaller saves time. Larger improves quality. Coerced to be less than or
+equal to the data size and at least as large as k.}
+
+\item{verbose}{(FALSE) Set to TRUE to see log messages generated to the
+terminal during the knn/hnsw stage, including a progress bar.}
+
+\item{progress}{('bar') If verbose is TRUE, a progress bar will be
+generated (for the knn step only) unless this is set to NULL. This adds
+a few percent to time overhead. This setting is ignored when verbose is
+FALSE (the default).}
+
+\item{grain_size}{(1) Minimum number of data rows processed per thread in
+the knn/hnsw phase. If not enough rows, fewer than \code{num_threads} threads
+are used.}
 
 \item{coloring}{(1) Integer tuning flag between 0 and 3 that controls the
 type of distance-1 graph coloring. 0 = no coloring; 1 (default) =
@@ -110,6 +148,7 @@ clusters <- FastPG::fastCluster( data, k, num_threads )
 \seealso{
 \itemize{
 \item \code{\link{parallel_louvain}} (Grappolo)
+\item \href{../../nmslibR/doc/the_nmslibR_package.html}{\code{vignette("the_nmslibR_package.html", package = "nmslibR")}}, (HNSW)
 \item \href{../doc/intro.html}{\code{vignette("intro.html", package= "FastPG")}} (FastPG vignette)
 }
 }

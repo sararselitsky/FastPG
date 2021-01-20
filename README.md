@@ -77,7 +77,7 @@ The main input is the numeric data to cluster as a matrix, where rows are elemen
 url <- "https://github.com/lmweber/benchmark-data-Levine-32-dim/raw/master/data/Levine_32dim.fcs"
 file <- "Levine_32dim.fcs"
 download.file( url, file, mode="wb") # This downloads a 41.5 MB binary file
-dataColumns <- c( 5:36 ) # extract only the data columns
+dataColumns <- c( 5:36 ) # extract only the data columns, whatever they are
 data <-  flowCore::exprs( flowCore::read.FCS( file ))[ , dataColumns ]
 ```
 
@@ -109,7 +109,7 @@ Caution: -1 indicates a point that was not clustered; each can be considered the
 
 FastPG utilizes the same three main steps as the phenograph algorithm [@Levine-2015, @Chen-2016], but uses fast, parallel implementations.
 
-* The k nearest neighbors determining step is implemented using hierarchical navigable small world graphs [@Malkov-2016] via the RcppHNSW library.
+* The k nearest neighbors determining step is implemented using hierarchical navigable small world graphs [@Malkov-2016] via the  [RcppHNSW](https://cran.rstudio.com/web/packages/RcppHNSW) library.
 * The nearest-neighbor distances are generated using an included parallel Jaccard metric function.
 * Clustering is implemented as community detection in the graph formed from the overlapping "k best friends" for each element. This is done using a parallel Louvain algorithm as implemented by Grappolo [@Lu-2015]. Code for Grappolo has been included within this package; the standalone application with additional functionality is available for download as described in the license section above.
   
@@ -117,19 +117,20 @@ Calling `fastCluster()`  is equivalent to and is essentially implemented as the 
 
 ```{r}
 # Approximate k nearest neighbours
-all_knn <- RcppHNSW::hnsw_knn(data,k=30,distance='l2',M = 16, ef_construction = 200, ef = 10,
-                              verbose = FALSE, progress = "bar", n_threads = num_threads,
-                              grain_size = 1)
+all_knn <- RcppHNSW::hnsw_knn( data, k= k, distance= 'l2',
+                               n_threads= num_threads )
+
 ind <- all_knn$idx
 
 # Parallel Jaccard metric
 links <- FastPG::rcpp_parallel_jce(ind)
 links <- FastPG::dedup_links(links)
 
-
 # Parallel Louvain clustering
 clusters <- FastPG::parallel_louvain( links )
 ```
+
+Note that RcppHNSW::hnsw_knn() and FastPG::parallel_louvain( links ) have numerous additional parameters; only the parameters used that are different from the defaults are shown above. The FastPG::fastCluster() wrapper allows setting all applicable parameters. See the function documentation for additional details.
 
 ## References
 
@@ -143,4 +144,3 @@ Lu, Hao, Mahantesh Halappanavar, and Ananth Kalyanaraman. 2015. “Parallel Heur
 
 Malkov, Yury A., and D. A. Yashunin. 2016. “Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs.” *CoRR* abs/1603.09320. http://arxiv.org/abs/1603.09320.
 
-Mouselimis, Lampros. 2018. *NmslibR: Non Metric Space (Approximate) Library.* https://CRAN.R-project.org/package=nmslibR.
