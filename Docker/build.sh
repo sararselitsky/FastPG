@@ -11,14 +11,14 @@ toolVersion="0.0.7" # This R package version
 domain="jefferys"   # GitHub account
 
 TAG1="${domain}/${name}:${baseVersion}_${toolVersion}"
-# TAG2="${domain}/${name}:${baseVersion}_latest"
-# TAG3="${domain}/${name}:latest"
+TAG2="${domain}/${name}:${baseVersion}_latest"
+TAG3="${domain}/${name}:latest"
 
 docker build \
-             --build-arg toolVersion="${toolVersion}" \
-             --build-arg imageCreated="${imageCreated}" \
-             -t "$TAG1" \
-#             -t "$TAG2" \
-#             -t "$TAG3" \
-             $@ \
-             "${context}"
+            --build-arg toolVersion="${toolVersion}" \
+            --build-arg imageCreated="${imageCreated}" \
+            -t "$TAG1" \
+            -t "$TAG2" \
+            -t "$TAG3" \
+            $@ \
+            "${context}"
