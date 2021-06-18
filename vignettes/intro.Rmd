@@ -31,8 +31,7 @@ This package is licensed under the MIT license, except for the Grappolo C++ libr
 
 ### Local install
 
-Once you have set up the dependencies, you can just install the `FastPG` package from
-GitHub in one of the normal ways. My favorite is:
+You can install the `FastPG` package from GitHub using the Bioconductor installation manager. If you don't have Bioconductor you need to install the `BiocManager` and `remotes` packages from CRAN. Then you can install using:
 
 ```{r}
 # Requires the CRAN packages "remotes" and "BiocManager" to be installed.
@@ -41,7 +40,7 @@ BiocManager::install("sararselitsky/FastPG")
 
 ### Use a pre-built Docker container
 
-A simpler way is to use a Docker container, `jefferys/fastpg:latest`, that is already set up and has the package pre-installed. You can just run it interactively, using the R command line inside it. To use the pre-built [FastPG container from DockerHub](https://hub.docker.com/repository/docker/jefferys/fastpg) you should be running on a 64 bit Intel/AMD compatible machine.
+Another way to use FastPG is via a Docker container, `jefferys/fastpg:latest`, that is already set up and has the package pre-installed. You can just run it interactively, using the R command line inside it. To use the pre-built [FastPG container from DockerHub](https://hub.docker.com/repository/docker/jefferys/fastpg) you should be running on a 64 bit Intel/AMD compatible machine.
 
 ```{bash}
 docker pull jefferys/fastpg:latest
@@ -86,7 +85,7 @@ clusters <- FastPG::fastCluster( data, k, num_threads )
 The `fastCluster()` function takes a number of additional tuning parameters, but
 those have reasonable defaults.
 
-### The `data=` parameter
+### The `data` parameter
 
 The main input is the numeric data to cluster as a matrix, where rows are elements to cluster and columns are the features that make elements similar or different. Any data matrix will do, for this example we extract a 265,627 x 32 numeric data matrix from the GitHub-published [clustering benchmark mass cytometry data set](https://github.com/lmweber/benchmark-data-Levine-32-dim), sourced from the phenograph paper [@Levine-2015].
 
@@ -95,7 +94,8 @@ url <- "https://github.com/lmweber/benchmark-data-Levine-32-dim/raw/master/data/
 file <- "Levine_32dim.fcs"
 download.file( url, file, mode="wb") # This downloads a 41.5 MB binary file
 dataColumns <- c( 5:36 ) # extract only the data columns, whatever they are
-data <-  flowCore::exprs( flowCore::read.FCS( file ))[ , dataColumns ]
+data <-  flowCore::exprs( flowCore::read.FCS( file, truncate_max_range= FALSE ))
+data <- data[ , dataColumns ]
 ```
 
 ### The `k` parameter
@@ -118,7 +118,7 @@ num_threads <- 4
 `fastCluster()` returns a list with two elements
 
 * `$modularity` = The modularity of the network created from the overlapping nearest neighbor graphs.
-* `$communities` = An integer vector where the nth element is the nth element from the input data. The value is the cluster that each input element has been assigned to.
+* `$communities` = An integer vector where the nth element is the nth element from the input data. The value is the cluster that each input element has been assigned to. `table(clusters$communities)` shows a count by cluster id. Note that these id's are arbitrary and not deterministic.
 
 Caution: -1 indicates a point that was not clustered; each can be considered their own cluster, even though they are all labeled “-1”. It is probable that you will not have any singleton clusters, but they can occur.
 
@@ -133,7 +133,7 @@ FastPG utilizes the same three main steps as the phenograph algorithm [@Levine-2
 Calling `fastCluster()`  is equivalent to and is essentially implemented as the following sequence of commands:
 
 ```{r}
-# Approximate k nearest neighbours
+# Approximate k nearest neighbors
 all_knn <- RcppHNSW::hnsw_knn( data, k= k, distance= 'l2',
                                n_threads= num_threads )
 

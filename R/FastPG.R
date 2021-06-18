@@ -31,7 +31,7 @@
 #' * 'l2' - Squared Euclidean
 #' * 'euclidian' - Euclidean
 #' * 'cosine' - Cosine
-#' * 'ip' - Inner product (un-normalized cosine). May give negative distances.
+#' * 'ip' - Inner product (unnormalized cosine). May give negative distances.
 #' @param M (16) Number of bi-directional links to create during knn index
 #'   construction. Must be >= 2. Often 12-48 works well, usually 2-100.
 #' @param ef_construction (200). Size of the dynamic list used during knn
@@ -76,7 +76,7 @@
 #'   row in the input matrix. Its value is the cluster that row has been assigned to.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Note, this example requires the `flowCore` package, but only as part of
 #' # obtaining a suitable large matrix to cluster.
 #' 
@@ -88,7 +88,8 @@
 #' # Convert to a suitably formatted data matrix to cluster,
 #' # extracting only the data columns from the downloaded file.
 #' dataColumns <- c( 5:36 )
-#' data <-  flowCore::exprs( flowCore::read.FCS( file ))[ , dataColumns ]
+#' data <-  flowCore::exprs( flowCore::read.FCS( file, truncate_max_range= FALSE ))
+#' data <- data[ , dataColumns ]
 #' 
 #' # Cluster the matrix with fastCluster
 #' clusters <- FastPG::fastCluster( data, k, num_threads )

@@ -38,7 +38,7 @@ creating the community graph.}
 \item 'l2' - Squared Euclidean
 \item 'euclidian' - Euclidean
 \item 'cosine' - Cosine
-\item 'ip' - Inner product (un-normalized cosine). May give negative distances.
+\item 'ip' - Inner product (unnormalized cosine). May give negative distances.
 }}
 
 \item{M}{(16) Number of bi-directional links to create during knn index
@@ -93,7 +93,7 @@ representation mode. 0 - A map/hash based structure; 1 - (Default) Use a
 vector/indexed structure.}
 }
 \value{
-Returns a list with two elements:
+Returns a list with two elements:2
 \itemize{
 \item \code{modularity} - A measure of the connectedness of a clustered network.
 When comparing different clusterings of the same network, the one with the
@@ -126,7 +126,7 @@ information on the tuning parameters is given in the documentation for
 }
 
 \examples{
-\donttest{
+\dontrun{
 # Note, this example requires the `flowCore` package, but only as part of
 # obtaining a suitable large matrix to cluster.
 
@@ -138,7 +138,8 @@ download.file( url, file, mode="wb")
 # Convert to a suitably formatted data matrix to cluster,
 # extracting only the data columns from the downloaded file.
 dataColumns <- c( 5:36 )
-data <-  flowCore::exprs( flowCore::read.FCS( file ))[ , dataColumns ]
+data <-  flowCore::exprs( flowCore::read.FCS( file, truncate_max_range= FALSE ))
+data <- data[ , dataColumns ]
 
 # Cluster the matrix with fastCluster
 clusters <- FastPG::fastCluster( data, k, num_threads )
