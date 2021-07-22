@@ -1,4 +1,4 @@
-FROM jefferys/bioconductor:3.10_latest
+FROM jefferys/bioconductor:3.13
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
@@ -14,14 +14,14 @@ RUN R -e 'BiocManager::install( \
        "igraph", "RcppHNSW", "mclust", "MLmetrics", "remotes" ), \
     update= FALSE, \
     ask= FALSE, \
-    version= "3.10" \
+    version= "3.13" \
 )'
 
 RUN R -e 'BiocManager::install( \
     c( "sararselitsky/FastPG@dev" ), \
     update= FALSE, \
     ask= FALSE, \
-    version= "3.10" \
+    version= "3.13" \
 )'
 
 # At end as args breaks all following caching. Timestamp changes every time...
@@ -29,7 +29,7 @@ RUN R -e 'BiocManager::install( \
 ARG imageCreated
 ARG toolVersion
 
-ARG toolSource="https://github.com/sararselitsky/FastPG/tree/dev"
+ARG toolSource="https://github.com/sararselitsky/FastPG"
 ARG tool="fastpg"
 ARG brief="${tool} - Container for running the R package FastPG."
 ARG toolLicense="MIT"
@@ -46,7 +46,7 @@ LABEL org.opencontainers.image.title="${brief}"
 LABEL org.opencontainers.image.description="The fastpg R package for clustering large sample sets (millions) with intermediate features (order of 100). Includes source from Grappolo, BSD-3 licensed from Pacific Northwest National Laboratory"
 
 # https://github.com/BioContainers/specs/blob/master/container-specs.md
-LABEL base_image="jefferys/bioconductor:3.10_latest"
+LABEL base_image="jefferys/bioconductor:3.13_latest"
 LABEL version="${toolVersion}"
 LABEL software.version="${toolVersion}"
 LABEL software="${tool}"
@@ -55,7 +55,5 @@ LABEL about.home="${toolSource}"
 LABEL about.license="${toolLicense}"
 LABEL about.tags="debian, bioconductor, fastpg"
 LABEL maintainer="Stuart R. Jefferys <srj@unc.edu>"
-
-# ENV RETICULATE_PYTHON=/usr/bin/python3
 
 CMD ["bash"]

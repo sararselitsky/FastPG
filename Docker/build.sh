@@ -6,7 +6,7 @@ imageMaintainer="Stuart R. Jefferys <srj@unc.edu>"
 imageCreated="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
 context="."
 name="fastpg"
-baseVersion="3.10"  # The bioconductor version
+baseVersion="3.13"  # The bioconductor version
 toolVersion="0.0.7" # This R package version
 domain="jefferys"   # GitHub account
 
