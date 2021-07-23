@@ -29,20 +29,9 @@ This package is licensed under the MIT license, except for the Grappolo C++ libr
 
 ## Installation
 
-This R package has dependencies outside of R, e.g. on a python package that wraps a library, `nmslib` [@Boytsov-2013]. You can either set up the dependencies and install locally, pull down a pre-built [Docker](https://www.docker.com) container, or build the Docker container yourself locally.
-
 ### Local install
 
-This R package depends on `nmslibR`[@Mouselimis-2018], which in turn depends on the python module `nmslib`. The instructions to install `nmslib` and its prerequisites are described in the `nmslibR` package [README](https://cran.r-project.org/web/packages/nmslibR/readme/README.html). Note that this setup is somewhat involved, especially if you are not familiar with setting up python modules.
-
-Using python from R requires R to know where to find the python you want to run. In order to avoid specifying the python version every new session (as described in the `nmslibR` document linked above), you can set a shell startup environmental variable `RETICULATE_PYTHON` to the path to python, e.g.:
-
-```{bash}
-export ENV RETICULATE_PYTHON=/usr/bin/python3
-```
-
-Once you have set up the dependencies, you can just install the `FastPG` package from
-GitHub in one of the normal ways. My favorite is:
+You can install the `FastPG` package from GitHub using the Bioconductor installation manager. If you don't have Bioconductor you need to install the `BiocManager` and `remotes` packages from CRAN. Then you can install using:
 
 ```{r}
 # Requires the CRAN packages "remotes" and "BiocManager" to be installed.
@@ -51,16 +40,19 @@ BiocManager::install("sararselitsky/FastPG")
 
 ### Use a pre-built Docker container
 
-A simpler way is to use a Docker container, `jefferys/fastpg:latest`, that is already set up and has the package pre-installed. You can just run it interactively, using the R command line inside it. To use the pre-built [FastPG container from DockerHub](https://hub.docker.com/repository/docker/jefferys/fastpg) you should be running on a 64 bit Intel/AMD compatible machine.
+Another way to use FastPG is via a Docker container, `jefferys/fastpg:latest`, that is already set up and has the package pre-installed. You can just run it interactively, using the R command line inside it. To use the pre-built [FastPG container from DockerHub](https://hub.docker.com/repository/docker/jefferys/fastpg) you should be running on a 64 bit Intel/AMD compatible machine.
 
 ```{bash}
 docker pull jefferys/fastpg:latest
 docker run -it --rm -v $PWD:$PWD -w $PWD jefferys/fastpg:latest
 R
-   # or
+    # or (singularity < 3.0)
 singularity pull docker://jefferys/fastpg:latest
 singularity shell -B $PWD --pwd $PWD -C fastpg-latest.simg
 R
+   # or (singularity 3.0+)
+singularity pull docker://jefferys/fastpg:latest
+singularity shell -B $PWD --pwd $PWD -C fastpg_latest.sif
 ```
 
 Note that you should consider this container version like an "application" and not an environment. You may have problems installing additional packages into it. To do that, see [Extending the Docker container](#extending-the-docker-container).
@@ -90,7 +82,10 @@ Clustering is as simple as:
 clusters <- FastPG::fastCluster( data, k, num_threads )
 ```
 
-### The `data=` parameter
+The `fastCluster()` function takes a number of additional tuning parameters, but
+those have reasonable defaults.
+
+### The `data` parameter
 
 The main input is the numeric data to cluster as a matrix, where rows are elements to cluster and columns are the features that make elements similar or different. Any data matrix will do, for this example we extract a 265,627 x 32 numeric data matrix from the GitHub-published [clustering benchmark mass cytometry data set](https://github.com/lmweber/benchmark-data-Levine-32-dim), sourced from the phenograph paper [@Levine-2015].
 
@@ -99,7 +94,8 @@ url <- "https://github.com/lmweber/benchmark-data-Levine-32-dim/raw/master/data/
 file <- "Levine_32dim.fcs"
 download.file( url, file, mode="wb") # This downloads a 41.5 MB binary file
 dataColumns <- c( 5:36 ) # extract only the data columns, whatever they are
-data <-  flowCore::exprs( flowCore::read.FCS( file ))[ , dataColumns ]
+data <-  flowCore::exprs( flowCore::read.FCS( file, truncate_max_range= FALSE ))
+data <- data[ , dataColumns ]
 ```
 
 ### The `k` parameter
@@ -122,7 +118,7 @@ num_threads <- 4
 `fastCluster()` returns a list with two elements
 
 * `$modularity` = The modularity of the network created from the overlapping nearest neighbor graphs.
-* `$communities` = An integer vector where the nth element is the nth element from the input data. The value is the cluster that each input element has been assigned to.
+* `$communities` = An integer vector where the nth element is the nth element from the input data. The value is the cluster that each input element has been assigned to. `table(clusters$communities)` shows a count by cluster id. Note that these id's are arbitrary and not deterministic.
 
 Caution: -1 indicates a point that was not clustered; each can be considered their own cluster, even though they are all labeled “-1”. It is probable that you will not have any singleton clusters, but they can occur.
 
@@ -130,25 +126,27 @@ Caution: -1 indicates a point that was not clustered; each can be considered the
 
 FastPG utilizes the same three main steps as the phenograph algorithm [@Levine-2015, @Chen-2016], but uses fast, parallel implementations.
 
-* The k nearest neighbors determining step is implemented using hierarchical navigable small world graphs [@Malkov-2016] via the R library nmslibR [@Mouselimis-2018].
+* The k nearest neighbors determining step is implemented using hierarchical navigable small world graphs [@Malkov-2016] via the  [RcppHNSW](https://cran.rstudio.com/web/packages/RcppHNSW) library.
 * The nearest-neighbor distances are generated using an included parallel Jaccard metric function.
 * Clustering is implemented as community detection in the graph formed from the overlapping "k best friends" for each element. This is done using a parallel Louvain algorithm as implemented by Grappolo [@Lu-2015]. Code for Grappolo has been included within this package; the standalone application with additional functionality is available for download as described in the license section above.
   
 Calling `fastCluster()`  is equivalent to and is essentially implemented as the following sequence of commands:
 
 ```{r}
-# Approximate k nearest neighbours
-init_nms <- nmslibR::NMSlib$new( input_data= data, space= 'l2', method= 'hnsw' )
-res <- init_nms$knn_Query_Batch( data, k= k, num_threads= num_threads )
-ind <- res$knn_idx
+# Approximate k nearest neighbors
+all_knn <- RcppHNSW::hnsw_knn( data, k= k, distance= 'l2',
+                               n_threads= num_threads )
+
+ind <- all_knn$idx
 
 # Parallel Jaccard metric
 links <- FastPG::rcpp_parallel_jce(ind)
-links <- links[ links[, 1] != 0 ]
-links <- matrix( links, ncol= 3 )
+links <- FastPG::dedup_links(links)
 
 # Parallel Louvain clustering
 clusters <- FastPG::parallel_louvain( links )
 ```
+
+Note that RcppHNSW::hnsw_knn() and FastPG::parallel_louvain( links ) have numerous additional parameters; only the parameters used that are different from the defaults are shown above. The FastPG::fastCluster() wrapper allows setting all applicable parameters. See the function documentation for additional details.
 
 ## References

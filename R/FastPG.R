@@ -21,10 +21,31 @@
 #' 
 #' @param data A numeric matrix of rows to cluster based on the similarity of
 #'   its column features.
-#' @param k (3) How many nearest neighbors to choose for each point when
+#' @param k (30) How many nearest neighbors to choose for each point when
 #'   creating the community graph.
 #' @param num_threads (1) Number of threads to use.
-#' 
+#' @param grain_size (1) Minimum number of data rows processed per thread in
+#'   the knn/hnsw phase. If not enough rows, fewer than `num_threads` threads
+#'   are used.
+#' @param distance ('l2') The type of knn distance to calculate. One of
+#' * 'l2' - Squared Euclidean
+#' * 'euclidian' - Euclidean
+#' * 'cosine' - Cosine
+#' * 'ip' - Inner product (unnormalized cosine). May give negative distances.
+#' @param M (16) Number of bi-directional links to create during knn index
+#'   construction. Must be >= 2. Often 12-48 works well, usually 2-100.
+#' @param ef_construction (200). Size of the dynamic list used during knn
+#'   index construction. Smaller saves time. Larger improves quality. Coerced
+#'   to be less than or equal to the data size and at least as large as k.
+#' @param ef (same as k) Size of the dynamic list used during knn searching.
+#'   Smaller saves time. Larger improves quality. Coerced to be less than or
+#'   equal to the data size and at least as large as k.
+#' @param verbose (FALSE) Set to TRUE to see log messages generated to the
+#'   terminal during the knn/hnsw stage, including a progress bar.
+#' @param progress ('bar') If verbose is TRUE, a progress bar will be
+#'   generated (for the knn step only) unless this is set to NULL. This adds
+#'   a few percent to time overhead. This setting is ignored when verbose is
+#'   FALSE (the default).
 #' @param coloring (1) Integer tuning flag between 0 and 3 that controls the
 #'   type of distance-1 graph coloring. 0 = no coloring; 1 (default) =
 #'   distance-1 graph coloring; 2= 1 with rebalancing; 3= Incomplete coloring
@@ -55,7 +76,7 @@
 #'   row in the input matrix. Its value is the cluster that row has been assigned to.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Note, this example requires the `flowCore` package, but only as part of
 #' # obtaining a suitable large matrix to cluster.
 #' 
@@ -67,7 +88,8 @@
 #' # Convert to a suitably formatted data matrix to cluster,
 #' # extracting only the data columns from the downloaded file.
 #' dataColumns <- c( 5:36 )
-#' data <-  flowCore::exprs( flowCore::read.FCS( file ))[ , dataColumns ]
+#' data <-  flowCore::exprs( flowCore::read.FCS( file, truncate_max_range= FALSE ))
+#' data <- data[ , dataColumns ]
 #' 
 #' # Cluster the matrix with fastCluster
 #' clusters <- FastPG::fastCluster( data, k, num_threads )
@@ -81,12 +103,21 @@
 #' @export
 fastCluster <- function(
   data, k= 30, num_threads= 1,
+  distance='l2', M= 16, ef_construction= 200, ef= k, verbose= FALSE,
+  progress= 'bar', grain_size= 1,
   coloring= 1, minGraphSize= 1000, numColors= 16, C_thresh= 1e-6,
   threshold= 1e-9, syncType= 0, basicOpt= 1
 ) {
-  init_nms <- nmslibR::NMSlib$new( input_data= data, space= 'l2', method= 'hnsw' )
-  res <- init_nms$knn_Query_Batch( data, k= k, num_threads= num_threads )
-  ind <- res$knn_idx
+  ef_construction= max(k, ef_construction)
+  ef_construction= min(ef_construction, nrow( data ))
+  ef= max(k, ef)
+  ef= min(ef, nrow( data ))
+  
+  all_knn <- RcppHNSW::hnsw_knn(
+    data, k= k, distance= distance, M= M, ef_construction= ef_construction,
+    ef= ef, verbose= FALSE, progress= progress, n_threads = num_threads,
+    grain_size = grain_size)
+  ind <- all_knn$idx
   
   links <- FastPG::rcpp_parallel_jce(ind)
   links <- dedup_links(links)

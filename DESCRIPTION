@@ -1,7 +1,7 @@
 Package: FastPG
 Title: Fast PhenoGraph-like clustering
-Version: 0.0.6
-Date: 2020-06-04
+Version: 0.0.7
+Date: 2021-07-23
 Authors@R: c(
     person( "Stuart", "Jefferys", role= c("aut", "cre"), email= "srj@unc.edu" ),
     person( "Sara", "Selitsky", role= "aut" ),
@@ -15,7 +15,7 @@ Imports:
     RcppParallel (>= 4.4.4),
     flowCore,
     checkmate,
-    nmslibR
+    RcppHNSW
 LinkingTo: 
     Rcpp,
     RcppParallel,
@@ -23,9 +23,13 @@ LinkingTo:
 SystemRequirements: GNU make
 NeedsCompilation: yes
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Suggests: 
+    testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    spelling
 VignetteBuilder: knitr
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.0)
+Config/testthat/edition: 3
+Language: en-US
