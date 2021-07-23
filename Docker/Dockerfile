@@ -18,7 +18,7 @@ RUN R -e 'BiocManager::install( \
 )'
 
 RUN R -e 'BiocManager::install( \
-    c( "sararselitsky/FastPG@dev" ), \
+    c( "sararselitsky/FastPG" ), \
     update= FALSE, \
     ask= FALSE, \
     version= "3.13" \
