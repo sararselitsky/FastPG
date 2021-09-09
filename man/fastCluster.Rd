@@ -93,7 +93,7 @@ representation mode. 0 - A map/hash based structure; 1 - (Default) Use a
 vector/indexed structure.}
 }
 \value{
-Returns a list with two elements:2
+Returns a list with two elements:
 \itemize{
 \item \code{modularity} - A measure of the connectedness of a clustered network.
 When comparing different clusterings of the same network, the one with the

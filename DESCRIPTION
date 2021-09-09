@@ -1,6 +1,6 @@
 Package: FastPG
 Title: Fast PhenoGraph-like clustering
-Version: 0.0.7
+Version: 0.0.8
 Date: 2021-07-23
 Authors@R: c(
     person( "Stuart", "Jefferys", role= c("aut", "cre"), email= "srj@unc.edu" ),
@@ -23,7 +23,7 @@ LinkingTo:
 SystemRequirements: GNU make
 NeedsCompilation: yes
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: 
     testthat (>= 3.0.0),
     knitr,

@@ -7,7 +7,7 @@ imageCreated="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
 context="."
 name="fastpg"
 baseVersion="3.13"  # The bioconductor version
-toolVersion="0.0.7" # This R package version
+toolVersion="0.0.8" # This R package version
 domain="jefferys"   # GitHub account
 
 TAG1="${domain}/${name}:${baseVersion}_${toolVersion}"

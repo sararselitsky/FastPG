@@ -1,3 +1,6 @@
+# FastPG 0.0.8
+* Fix Makevars.win compiler flags to allow compiling under windows.
+
 # FastPG 0.0.7
 
 * Replaced the Python library based HNSW KNN (nmslibR) with an Rcpp based one (RcppHNSW).
