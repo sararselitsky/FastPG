@@ -28,8 +28,15 @@ Thomas Bodenheimer, Mahantesh Halappanavar, Stuart Jefferys, Ryan Gibson, Siyao 
 This package is licensed under the MIT license, except for the Grappolo C++ library by Mahantesh Halappanavar (hala@pnnl.gov) which is included and licensed under the BSD-3 license as described in the headings of the relevant *.cpp files. Some alterations to the original Grappolo source have been made to support installation and use within an R package. The original Grappolo C++ library is available at https://hpc.pnl.gov/people/hala/grappolo.html
 
 ## Installation
+You can install locally from GitHub, or use the Docker container from DockerHub:
 
 ### Local install
+
+Before installing, you must have R, of course, but also:
+
+* If you are on Windows you will need the version of Rtools appropriate for the version of R (and need to set the path correctly), see https://cran.r-project.org/bin/windows/Rtools/. If you upgraded from R 3 to R 4 and have not already done so, you should uninstall the old and install the new Rtools.
+
+* If you are on Mac OS X, you will need the x-code command line tools and probably need to install the OpenMP library, which Apple no longer distributes as part of x-code. One way to do that is to install the data.table package as described here: https://firas.io/post/data.table_openmp/. Afterwards, FastPG and any other programs that use OpenMP should work.
 
 You can install the `FastPG` package from GitHub using the Bioconductor installation manager. If you don't have Bioconductor you need to install the `BiocManager` and `remotes` packages from CRAN. Then you can install using:
 
@@ -37,6 +44,8 @@ You can install the `FastPG` package from GitHub using the Bioconductor installa
 # Requires the CRAN packages "remotes" and "BiocManager" to be installed.
 BiocManager::install("sararselitsky/FastPG")
 ```
+
+To install the latest code from a branch or a specific tagged version, append "@<source>" to the repository string used above, e.g `BiocManager::install("sararselitsky/FastPG@dev")` or `BiocManager::install("sararselitsky/FastPG@0.0.8")`
 
 ### Use a pre-built Docker container
 

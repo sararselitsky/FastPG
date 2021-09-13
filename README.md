@@ -12,7 +12,15 @@ This package is licensed under the MIT license, except for the Grappolo C++ libr
 
 ## Installation
 
+You can install locally from GitHub, or use the Docker container from DockerHub:
+
 ### Local install
+
+Before installing, you must have R, of course, but also:
+
+* If you are on Windows you will need the version of Rtools appropriate for the version of R (and need to set the path correctly), see https://cran.r-project.org/bin/windows/Rtools/. If you upgraded from R 3 to R 4 and have not already done so, you should uninstall the old and install the new Rtools.
+
+* If you are on Mac OS X, you will need the x-code command line tools and probably need to install the OpenMP library, which Apple no longer distributes as part of x-code. One way to do that is to install the data.table package as described here: https://firas.io/post/data.table_openmp/. Afterwards, FastPG and any other programs that use OpenMP should work.
 
 You can install the `FastPG` package from GitHub using the Bioconductor installation manager. If you don't have Bioconductor you need to install the `BiocManager` and `remotes` packages from CRAN. Then you can install using:
 
@@ -20,6 +28,8 @@ You can install the `FastPG` package from GitHub using the Bioconductor installa
 # Requires the CRAN packages "remotes" and "BiocManager" to be installed.
 BiocManager::install("sararselitsky/FastPG")
 ```
+
+To install the latest code from a branch or a specific tagged version, append "@<source>" to the repository string used above, e.g `BiocManager::install("sararselitsky/FastPG@dev")` or `BiocManager::install("sararselitsky/FastPG@0.0.8")`
 
 ### Use a pre-built Docker container
 
@@ -133,8 +143,6 @@ clusters <- FastPG::parallel_louvain( links )
 Note that RcppHNSW::hnsw_knn() and FastPG::parallel_louvain( links ) have numerous additional parameters; only the parameters used that are different from the defaults are shown above. The FastPG::fastCluster() wrapper allows setting all applicable parameters. See the function documentation for additional details.
 
 ## References
-
-Boytsov, Leonid, and Bilegsaikhan Naidan. 2013. “Engineering Efficient and Effective Non-Metric Space Library.” In *Similarity Search and Applications - 6th International Conference, SISAP 2013, A Coruña, Spain, October 2-4, 2013, Proceedings*, edited by Nieves R. Brisaboa, Oscar Pedreira, and Pavel Zezula, 8199:280–93. Lecture Notes in Computer Science. Springer. https://doi.org/10.1007/978-3-642-41062-8_28.
 
 Chen, Hao, Mai Chan Lau, Michael Thomas Wong, Evan W Newell, Michael Poidinger, and Jinmiao Chen. 2016. *“Cytofkit: A Bioconductor Package for an Integrated Mass Cytometry Data Analysis Pipeline.”* PLoS Comput Biol 12 (9).
 
