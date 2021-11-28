@@ -259,7 +259,7 @@ replaceMap = 1
 
 int replaceMap = 1;
 
-bool VF = true;
+bool VF = false;
 
 /* Vertex Following option */
 //if( opts.VF ) {
