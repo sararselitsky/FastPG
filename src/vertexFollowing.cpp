@@ -116,12 +116,12 @@ double buildNewGraphVF(graph *Gin, graph *Gout, long *C, long numUniqueClusters)
   assert(vtxPtrOut != 0);
   vtxPtrOut[0] = 0; //First location is always a zero
   /* Step 1 : Regroup the node into cluster node */
-  map<long,long>** cluPtrIn = (map<long,long>**) malloc(numUniqueClusters*sizeof(map<long,long>*));
+  map<long,double>** cluPtrIn = (map<long,double>**) malloc(numUniqueClusters*sizeof(map<long,double>*));
   assert(cluPtrIn != 0);	
 
 #pragma omp parallel for
   for (long i=0; i<numUniqueClusters; i++) {
-	cluPtrIn[i] = new map<long,long>();
+	cluPtrIn[i] = new map<long,double>();
 	//Do not add self-loops
         //(*(cluPtrIn[i]))[i] = 0; //Add for a self loop with zero weight
   }
@@ -148,7 +148,7 @@ double buildNewGraphVF(graph *Gin, graph *Gout, long *C, long numUniqueClusters)
 		continue; //Not a valid cluster id
 	long adj1 = vtxPtrIn[i];
 	long adj2 = vtxPtrIn[i+1];
-	map<long, long>::iterator localIterator;
+	map<long, double>::iterator localIterator;
         assert(C[i] < numUniqueClusters);
   	//Now look for all the neighbors of this cluster
 	for(long j=adj1; j<adj2; j++) {
@@ -160,9 +160,9 @@ double buildNewGraphVF(graph *Gin, graph *Gout, long *C, long numUniqueClusters)
 	
 			localIterator = cluPtrIn[C[i]]->find(C[tail]); //Check if it exists			
 			if( localIterator != cluPtrIn[C[i]]->end() ) {	//Already exists
-                                localIterator->second += (long)vtxIndIn[j].weight;
+                                localIterator->second += vtxIndIn[j].weight;
 			} else {
-				(*(cluPtrIn[C[i]]))[C[tail]] = (long)vtxIndIn[j].weight; //Self-edge
+				(*(cluPtrIn[C[i]]))[C[tail]] = vtxIndIn[j].weight; //Self-edge
 				__sync_fetch_and_add(&vtxPtrOut[C[i]+1], 1);
 				if(C[i] == C[tail])
                                 	__sync_fetch_and_add(&NE_self, 1); //Keep track of self #edges 
@@ -207,7 +207,7 @@ double buildNewGraphVF(graph *Gin, graph *Gout, long *C, long numUniqueClusters)
 #pragma omp parallel for
   for (long i=0; i<NV_out; i++) {
 	long Where;
-	map<long, long>::iterator localIterator = cluPtrIn[i]->begin();
+	map<long, double>::iterator localIterator = cluPtrIn[i]->begin();
 	//Now go through the other edges:
 	while ( localIterator != cluPtrIn[i]->end()) {
 		Where = vtxPtrOut[i] + __sync_fetch_and_add(&Added[i], 1);
